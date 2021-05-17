@@ -27,10 +27,32 @@ flutter pub run test_cov_console
 File                                         |% Branch | % Funcs | % Lines | Uncovered Line #s |
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
- print_coverage.dart                         |  100.00 |  100.00 |   80.87 |...,206,207,208,209|
+ print_cov.dart                              |  100.00 |  100.00 |   77.95 |...,252,258,261,262|
+ print_cov_constants.dart                    |    0.00 |    0.00 |    0.00 |    no unit testing|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
 ---------------------------------------------|---------|---------|---------|-------------------|
- All files with unit testing                 |  100.00 |  100.00 |   80.87 |                   |
+ All files with unit testing                 |  100.00 |  100.00 |   77.95 |                   |
+---------------------------------------------|---------|---------|---------|-------------------|
+```
+## Optional parameter
+If not given a FILE, "coverage/lcov.info" will be used.
+-f, --file=<FILE>                      the target lcov.info file to be reported
+-e, --exclude=<STRING1,STRING2,...>    a list of contains string for files without unit testing
+                                       to be excluded from report
+-h, --help                             show this help
+
+### example run the tool with parameters
+```
+flutter pub run bin\test_cov_console.dart --file=coverage\lcov.info --exclude=_constants,_mock
+---------------------------------------------|---------|---------|---------|-------------------|
+File                                         |% Branch | % Funcs | % Lines | Uncovered Line #s |
+---------------------------------------------|---------|---------|---------|-------------------|
+lib/src/                                     |         |         |         |                   |
+ print_cov.dart                              |  100.00 |  100.00 |   77.95 |...,252,258,261,262|
+lib/                                         |         |         |         |                   |
+ test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
+---------------------------------------------|---------|---------|---------|-------------------|
+ All files with unit testing                 |  100.00 |  100.00 |   77.95 |                   |
 ---------------------------------------------|---------|---------|---------|-------------------|
 ```
