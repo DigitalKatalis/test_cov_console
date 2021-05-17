@@ -3,4 +3,4 @@
 
 library test_cov_console;
 
-export 'src/print_coverage.dart';
+export 'src/print_cov.dart';

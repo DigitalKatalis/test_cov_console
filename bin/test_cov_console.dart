@@ -53,5 +53,5 @@ Future main(List<String> arguments) async {
   final lines = await File(lcovFile).readAsLines();
   final files = await getFiles('lib', patterns);
 
-  printCoverage(lines, files);
+  printCov(lines, files);
 }

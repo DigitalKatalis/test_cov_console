@@ -10,7 +10,7 @@ void main() {
   final printout = output.split('\n');
   group('printCoverage', () {
     test('should print out with correct format & values', overridePrint(() {
-      printCoverage(lines, files);
+      printCov(lines, files);
       expect(log, printout);
     }));
   });

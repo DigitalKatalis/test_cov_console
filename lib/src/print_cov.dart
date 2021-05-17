@@ -3,26 +3,19 @@
 
 import 'dart:io';
 
-const _fileLen = 45;
-const _percentLen = 9;
-const _uncoverLen = 19;
-const _hundred = '100.00';
-const _zero = '0.00 ';
-const _dart = 'dart';
-const _slash = '/';
-const _bSlash = '\\';
+import 'package:test_cov_console/src/print_cov_constants.dart';
 
 /// FileEntity.
 ///
 /// Simple File data structure with [directory] and [fileName] attributes.
 class FileEntity {
-  String fileName = '';
-  String directory = '';
+  String fileName = PrintCovConstants.emptyString;
+  String directory = PrintCovConstants.emptyString;
 
   /// The constructor will extracts [fullName] to [directory] and [fileName].
   FileEntity(String fullName) {
-    fileName = fullName.split(_slash).last;
-    directory = fullName.replaceAll(fileName, '');
+    fileName = fullName.split(PrintCovConstants.slash).last;
+    directory = fullName.replaceAll(fileName, PrintCovConstants.emptyString);
   }
 
   /// Compares this FileEntity to [other].
@@ -49,8 +42,8 @@ class _Data {
   int linesHit = 0;
   int branchFound = 0;
   int branchHit = 0;
-  String uncoveredLines = '';
-  String uncoveredBranch = '';
+  String uncoveredLines = PrintCovConstants.emptyString;
+  String uncoveredBranch = PrintCovConstants.emptyString;
   FileEntity file;
 
   _Data(FileEntity file) {
@@ -76,20 +69,29 @@ class _Data {
 /// Generate coverage test report from lcov.info file to console.
 /// [lines] is the list of string from lcov.info file
 /// [files] is the list of file in string that already filter by exclude params.
-void printCoverage(List<String> lines, List<FileEntity> files) {
+void printCov(List<String> lines, List<FileEntity> files) {
   var idx = 0;
-  _print('-', '-', '-', '-', '-', '-');
+  _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
+      PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
   _print(
-      'File', '% Branch ', '% Funcs ', '% Lines ', 'Uncovered Line #s ', ' ');
-  _print('-', '-', '-', '-', '-', '-');
-  final result = lines
-      .fold(<_Data>[_Data(FileEntity('')), _Data(FileEntity(''))],
-          (List<_Data> data, line) {
+      PrintCovConstants.file,
+      PrintCovConstants.branch,
+      PrintCovConstants.functions,
+      PrintCovConstants.lines,
+      PrintCovConstants.unCovered,
+      PrintCovConstants.space);
+  _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
+      PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
+  final result = lines.fold(<_Data>[
+    _Data(FileEntity(PrintCovConstants.emptyString)),
+    _Data(FileEntity(PrintCovConstants.emptyString))
+  ], (List<_Data> data, line) {
     var data0 = data[0];
-    final values = line.split(':');
+    final values = line.split(PrintCovConstants.colon);
     switch (values[0]) {
-      case 'SF':
-        final file = FileEntity(values.last.replaceAll(_bSlash, _slash));
+      case PrintCovConstants.SF:
+        final file = FileEntity(values.last
+            .replaceAll(PrintCovConstants.bSlash, PrintCovConstants.slash));
         for (var i = idx; i < files.length; i++) {
           idx = i;
           if (file.compareTo(files[i]) > 0) {
@@ -106,39 +108,43 @@ void printCoverage(List<String> lines, List<FileEntity> files) {
         final result = _printDir(file, data0.getDirectory(), false);
         data0.file = result;
         break;
-      case 'DA':
-        if (line.endsWith('0')) {
+      case PrintCovConstants.DA:
+        if (line.endsWith(PrintCovConstants.zero)) {
           data0.uncoveredLines =
-              (data0.uncoveredLines != '' ? '${data0.uncoveredLines},' : '') +
-                  values[1].split(',')[0];
+              (data0.uncoveredLines != PrintCovConstants.emptyString
+                      ? '${data0.uncoveredLines},'
+                      : PrintCovConstants.emptyString) +
+                  values[1].split(PrintCovConstants.comma)[0];
         }
         break;
-      case 'LF':
+      case PrintCovConstants.LF:
         data0.linesFound = int.parse(values[1]);
         break;
-      case 'LH':
+      case PrintCovConstants.LH:
         data0.linesHit = int.parse(values[1]);
         break;
-      case 'FNF':
+      case PrintCovConstants.FNF:
         data0.functionFound = int.parse(values[1]);
         break;
-      case 'FNH':
+      case PrintCovConstants.FNH:
         data0.functionHit = int.parse(values[1]);
         break;
-      case 'BRF':
+      case PrintCovConstants.BRF:
         data0.branchFound = int.parse(values[1]);
         break;
-      case 'BRH':
+      case PrintCovConstants.BRH:
         data0.branchHit = int.parse(values[1]);
         break;
-      case 'BRDA':
-        if (line.endsWith('0')) {
+      case PrintCovConstants.BRDA:
+        if (line.endsWith(PrintCovConstants.zero)) {
           data0.uncoveredBranch =
-              (data0.uncoveredBranch != '' ? '${data0.uncoveredBranch},' : '') +
-                  values[1].split(',')[0];
+              (data0.uncoveredBranch != PrintCovConstants.emptyString
+                      ? '${data0.uncoveredBranch},'
+                      : PrintCovConstants.emptyString) +
+                  values[1].split(PrintCovConstants.comma)[0];
         }
         break;
-      case 'end_of_record':
+      case PrintCovConstants.endOfRecord:
         {
           data0 = _printFile(data0);
           data[1].total(data0);
@@ -154,19 +160,33 @@ void printCoverage(List<String> lines, List<FileEntity> files) {
       _printDir(files[i], result[0].getDirectory(), true);
     }
   }
-  _print('-', '-', '-', '-', '-', '-');
-  result[1].file = FileEntity('All files with unit testing');
+  _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
+      PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
+  result[1].file = FileEntity(PrintCovConstants.allFiles);
   _printFile(result[1]);
-  _print('-', '-', '-', '-', '-', '-');
+  _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
+      PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
 }
 
 FileEntity _printDir(FileEntity file, String directory, bool printFile) {
   if (file.directory != directory) {
     _print(
-        _formatString(file.directory, _fileLen, ''), ' ', ' ', ' ', ' ', ' ');
+        _formatString(file.directory, PrintCovConstants.fileLen,
+            PrintCovConstants.emptyString),
+        PrintCovConstants.space,
+        PrintCovConstants.space,
+        PrintCovConstants.space,
+        PrintCovConstants.space,
+        PrintCovConstants.space);
   }
   if (printFile) {
-    _print(' ${file.fileName}', _zero, _zero, _zero, 'no unit testing', ' ');
+    _print(
+        ' ${file.fileName}',
+        PrintCovConstants.zeroDotZeros,
+        PrintCovConstants.zeroDotZeros,
+        PrintCovConstants.zeroDotZeros,
+        PrintCovConstants.noUnitTesting,
+        PrintCovConstants.space);
   }
   return file;
 }
@@ -175,25 +195,27 @@ _Data _printFile(_Data data0) {
   final functions = _formatPercent(data0.functionHit, data0.functionFound);
   final lines = _formatPercent(data0.linesHit, data0.linesFound);
   final branch = _formatPercent(data0.branchHit, data0.branchFound);
-  if (functions.trim() == _hundred &&
-      lines.trim() == _hundred &&
-      branch.trim() == _hundred) {
-    data0.uncoveredLines = '';
-    data0.uncoveredBranch = '';
+  if (functions.trim() == PrintCovConstants.hundred &&
+      lines.trim() == PrintCovConstants.hundred &&
+      branch.trim() == PrintCovConstants.hundred) {
+    data0.uncoveredLines = PrintCovConstants.emptyString;
+    data0.uncoveredBranch = PrintCovConstants.emptyString;
   }
   var uncovered = data0.uncoveredLines.isEmpty
       ? data0.uncoveredBranch
       : data0.uncoveredLines;
-  uncovered = _formatString(uncovered, _uncoverLen, '...');
-  final file = _formatString(' ${data0.getFileName()}', _fileLen, '');
-  _print(file, branch, functions, lines, uncovered, ' ');
+  uncovered = _formatString(
+      uncovered, PrintCovConstants.uncoverLen, PrintCovConstants.dot3);
+  final file = _formatString(' ${data0.getFileName()}',
+      PrintCovConstants.fileLen, PrintCovConstants.emptyString);
+  _print(file, branch, functions, lines, uncovered, PrintCovConstants.space);
 
   return data0;
 }
 
 String _formatPercent(int hit, int found) {
   if (found == 0) {
-    return '$_hundred ';
+    return '${PrintCovConstants.hundred} ';
   }
   return '${(hit / found * 100).toStringAsFixed(2)} ';
 }
@@ -206,11 +228,11 @@ String _formatString(String input, int length, String more) {
 
 void _print(String file, String branch, String function, String lines,
     String uncovered, String filler) {
-  print('${file.padRight(_fileLen, filler)}|'
-      '${branch.padLeft(_percentLen, filler)}|'
-      '${function.padLeft(_percentLen, filler)}|'
-      '${lines.padLeft(_percentLen, filler)}|'
-      '${uncovered.padLeft(_uncoverLen, filler)}|');
+  print('${file.padRight(PrintCovConstants.fileLen, filler)}|'
+      '${branch.padLeft(PrintCovConstants.percentLen, filler)}|'
+      '${function.padLeft(PrintCovConstants.percentLen, filler)}|'
+      '${lines.padLeft(PrintCovConstants.percentLen, filler)}|'
+      '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)}|');
 }
 
 /// getFiles.
@@ -224,7 +246,8 @@ Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
   final List<FileEntity> list = [];
   files.forEach((element) {
     final String file = element.uri.toString();
-    if (file.split('.').last == _dart && !_isExcluded(excludes, file)) {
+    if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
+        !_isExcluded(excludes, file)) {
       final file = FileEntity(element.uri.toString());
       list.add(file);
     }
