@@ -33,6 +33,11 @@ class FileEntity {
     }
     return fileName.compareTo(other.fileName);
   }
+
+  @override
+  String toString() {
+    return '$directory/$fileName';
+  }
 }
 
 class _Data {

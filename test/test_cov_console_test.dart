@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:test_cov_console/test_cov_console.dart';
@@ -14,6 +15,24 @@ void main() {
       expect(log, printout);
     }));
   });
+
+  group('getFiles', () {
+    test('should return file list with some exclusion', () async {
+      final dir = _getCurrentDir();
+      final result = await getFiles('${dir}lib', ['constants']);
+      expect(result[0].toString(), '$dir${files0[0].toString()}');
+      expect(result[1].toString(), '$dir${files0[1].toString()}');
+    });
+  });
+}
+
+String _getCurrentDir() {
+  final slash = Platform.isWindows ? '\\' : '/';
+  final curDir = Directory.current.path.toString();
+  if (curDir.split(slash).last == 'test') {
+    return '../';
+  }
+  return '';
 }
 
 void Function() overridePrint(void testFn()) => () {
@@ -24,14 +43,19 @@ void Function() overridePrint(void testFn()) => () {
       return Zone.current.fork(specification: spec).run<void>(testFn);
     };
 
+List<FileEntity> files0 = [
+  FileEntity('lib/src/print_cov.dart'),
+  FileEntity('lib/test_cov_console.dart'),
+];
+
 List<FileEntity> files = [
-  FileEntity('lib/src/a_print_coverage.dart'),
-  FileEntity('lib/src/print_coverage.dart'),
+  FileEntity('lib/src/a_print_cov.dart'),
+  FileEntity('lib/src/print_cov.dart'),
   FileEntity('lib/test_cov_console.dart'),
 ];
 
 const String lcovFile = '''
-SF:lib/src/print_coverage.dart
+SF:lib/src/print_cov.dart
 DA:8,1
 DA:9,1
 DA:10,1
@@ -111,8 +135,8 @@ const output = '''
 File                                         |% Branch | % Funcs | % Lines | Uncovered Line #s |
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
- a_print_coverage.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
- print_coverage.dart                         |  100.00 |  100.00 |   86.96 |...,61,62,63,73,120|
+ a_print_cov.dart                            |    0.00 |    0.00 |    0.00 |    no unit testing|
+ print_cov.dart                              |  100.00 |  100.00 |   86.96 |...,61,62,63,73,120|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
 ---------------------------------------------|---------|---------|---------|-------------------|
