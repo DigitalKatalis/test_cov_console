@@ -36,12 +36,13 @@ lib/                                         |         |         |         |    
 ---------------------------------------------|---------|---------|---------|-------------------|
 ```
 ## Optional parameter
+```
 If not given a FILE, "coverage/lcov.info" will be used.
 -f, --file=<FILE>                      the target lcov.info file to be reported
 -e, --exclude=<STRING1,STRING2,...>    a list of contains string for files without unit testing
                                        to be excluded from report
 -h, --help                             show this help
-
+```
 ### example run the tool with parameters
 ```
 flutter pub run test_cov_console --file=coverage\lcov.info --exclude=_constants,_mock
