@@ -1,3 +1,7 @@
+## 0.0.6 - 20 May 2021
+
+* Fixed minor issue on github repository link.
+
 ## 0.0.5 - 17 May 2021
 
 * Add parameter to exclude files without unit testing that contains some strings
