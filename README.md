@@ -6,7 +6,7 @@ This small dart tools is used to generate Flutter Coverage Test report to consol
 Add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 ```
 dev_dependencies:
-  test_cov_console: ^0.0.5
+  test_cov_console: ^0.0.6
 ```
 
 ## How to run
@@ -44,7 +44,7 @@ If not given a FILE, "coverage/lcov.info" will be used.
 
 ### example run the tool with parameters
 ```
-flutter pub run bin\test_cov_console.dart --file=coverage\lcov.info --exclude=_constants,_mock
+flutter pub run test_cov_console --file=coverage\lcov.info --exclude=_constants,_mock
 ---------------------------------------------|---------|---------|---------|-------------------|
 File                                         |% Branch | % Funcs | % Lines | Uncovered Line #s |
 ---------------------------------------------|---------|---------|---------|-------------------|
