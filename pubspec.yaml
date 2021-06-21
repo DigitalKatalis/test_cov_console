@@ -12,7 +12,7 @@ executables:
 dependencies:
   flutter:
     sdk: flutter
-  args: ^2.1.1
+  args: ^2.0.0
 
 dev_dependencies:
   flutter_test:
