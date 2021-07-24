@@ -4,7 +4,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:args/args.dart' as a;
 import 'package:test_cov_console/test_cov_console.dart';
 
 /// Generate coverage test report from lcov.info file to console.
@@ -20,35 +19,16 @@ import 'package:test_cov_console/test_cov_console.dart';
 /// -h, --help                show this help
 /// ```
 Future main(List<String> arguments) async {
-  final parser = a.ArgParser()
-    ..addSeparator(
-        'Generate coverage test report from lcov.info file to console.\n'
-        'If not given a FILE, "coverage/lcov.info" will be used.')
-    ..addOption('file',
-        abbr: 'f',
-        help: 'the target lcov.info file to be reported',
-        valueHelp: 'FILE')
-    ..addMultiOption('exclude',
-        abbr: 'e',
-        splitCommas: true,
-        help: 'a list of contains string for files without unit testing\n'
-            'to be excluded from report',
-        valueHelp: 'STRING1,STRING2,...')
-    ..addFlag('help',
-        abbr: 'h', negatable: false, defaultsTo: false, help: 'show this help');
-
-  final args = parser.parse(arguments);
-
-  if (args['help']) {
-    print(parser.usage);
+  final args = Parser(arguments).parse();
+  if (args[ParserConstants.help] != null) {
+    print(args[ParserConstants.help]);
     exit(0);
   }
 
-  final patterns =
-      (args['exclude'] as List<String>).map((s) => s).toList(growable: false);
+  final List<String> patterns = args[ParserConstants.exclude] ?? [];
 
   final slash = Platform.isWindows ? '\\' : '/';
-  String lcovFile = args['file'] ?? 'coverage${slash}lcov.info';
+  String lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
 
   final lines = await File(lcovFile).readAsLines();
   final files = await getFiles('lib', patterns);

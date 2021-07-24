@@ -44,12 +44,15 @@ void Function() overridePrint(void testFn()) => () {
     };
 
 List<FileEntity> files0 = [
+  FileEntity('lib/src/parser.dart'),
   FileEntity('lib/src/print_cov.dart'),
   FileEntity('lib/test_cov_console.dart'),
 ];
 
 List<FileEntity> files = [
   FileEntity('lib/src/a_print_cov.dart'),
+  FileEntity('lib/src/parser.dart'),
+  FileEntity('lib/src/parser_constants.dart'),
   FileEntity('lib/src/print_cov.dart'),
   FileEntity('lib/test_cov_console.dart'),
 ];
@@ -136,6 +139,8 @@ File                                         |% Branch | % Funcs | % Lines | Unc
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
  a_print_cov.dart                            |    0.00 |    0.00 |    0.00 |    no unit testing|
+ parser.dart                                 |    0.00 |    0.00 |    0.00 |    no unit testing|
+ parser_constants.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
  print_cov.dart                              |  100.00 |  100.00 |   86.96 |...,61,62,63,73,120|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
