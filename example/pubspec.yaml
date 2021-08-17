@@ -32,8 +32,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test_cov_console:
-    path: ../
+  test_cov_console: ^0.0.7
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
