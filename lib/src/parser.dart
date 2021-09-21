@@ -23,15 +23,17 @@ class Parser {
       }
       try {
         for (final opt in ParserConstants.fieldMap) {
-          if (arg == '-${opt.opt1}' || arg.startsWith('--${opt.opt2}')) {
-            if (arg == '-${opt.opt1}') {
-              bContinue = true;
-              result['${opt.opt2}'] =
-                  _getValues(arguments[i + 1], '', opt.isList);
-            } else {
-              result['${opt.opt2}'] =
-                  _getValues(arg, '--${opt.opt2}=', opt.isList);
-            }
+          // Get value when using format: -<option> <value>
+          if (arg == '-${opt.opt1}') {
+            bContinue = true;
+            result['${opt.opt2}'] =
+                _getValues(arguments[i + 1], '', opt.isList);
+            break;
+          }
+          // Get value when using format: --<option>=<value>
+          if (arg.startsWith('--${opt.opt2}')) {
+            result['${opt.opt2}'] =
+                _getValues(arg, '--${opt.opt2}=', opt.isList);
             break;
           }
         }
