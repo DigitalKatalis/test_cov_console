@@ -10,37 +10,35 @@ class Parser {
       return {};
     }
 
+    //Return for help option
+    if (arguments.contains('-h') ||
+        arguments.contains('--${ParserConstants.help}')) {
+      return _returnHelp();
+    }
+
+    //Replace all option 1 format (-f value) with option 2 format (--file=value)
+    String strArg = arguments.join(' ');
+    for (final opt in ParserConstants.fieldMap) {
+      strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2}=');
+    }
+
+    final args = strArg.split(' ');
     final Map<String, dynamic> result = {};
-    bool bContinue = false;
-    for (var i = 0; i < arguments.length; ++i) {
-      if (bContinue) {
-        bContinue = false;
-        continue;
-      }
-      final arg = arguments[i].toLowerCase();
-      if (arg == '-h' || arg.startsWith('--${ParserConstants.help}')) {
-        return _returnHelp();
-      }
-      try {
-        for (final opt in ParserConstants.fieldMap) {
-          // Get value when using format: -<option> <value>
-          if (arg == '-${opt.opt1}') {
-            bContinue = true;
-            result['${opt.opt2}'] =
-                _getValues(arguments[i + 1], '', opt.isList);
-            break;
-          }
-          // Get value when using format: --<option>=<value>
-          if (arg.startsWith('--${opt.opt2}')) {
-            result['${opt.opt2}'] =
-                _getValues(arg, '--${opt.opt2}=', opt.isList);
-            break;
-          }
+    for (final item in args) {
+      final arg = item.toLowerCase();
+      for (final opt in ParserConstants.fieldMap) {
+        if (arg.startsWith('--${opt.opt2}')) {
+          result['${opt.opt2}'] = _getValues(arg, '--${opt.opt2}=', opt.isList);
+          break;
         }
-      } catch (e) {
-        return _returnHelp(error: true);
       }
     }
+
+    //Return error, if there is no result, while some args was passing.
+    if (result.isEmpty && args.isNotEmpty) {
+      return _returnHelp(error: true);
+    }
+
     return result;
   }
 
