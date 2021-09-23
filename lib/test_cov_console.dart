@@ -4,3 +4,5 @@
 library test_cov_console;
 
 export 'src/print_cov.dart';
+export 'src/parser.dart';
+export 'src/parser_constants.dart';
