@@ -5,6 +5,15 @@ class Parser {
 
   Parser(this.arguments);
 
+  /// parse.
+  ///
+  /// Parse [arguments] in GNU (--help, --file, --exclude)
+  /// and POSIX (-h, -f, -e) style options
+  /// to Map<String, dynamic>, for instance
+  /// {
+  ///   'file': '/dir1/file1.dart'
+  ///   'exclude': ['string1', 'string2' ]
+  /// }
   Map<String, dynamic> parse() {
     if (arguments.isEmpty) {
       return {};
@@ -42,6 +51,8 @@ class Parser {
     return result;
   }
 
+  /// _returnHelp
+  /// Return help text in Map<String, dynamic> with [error] message
   dynamic _returnHelp({bool error = false}) {
     return {
       ParserConstants.help:
@@ -49,6 +60,8 @@ class Parser {
     };
   }
 
+  /// _getValues
+  /// Return string of value
   dynamic _getValues(String value, String replace, bool isList) {
     if (isList) {
       return value.replaceFirst(replace, '').split(',');

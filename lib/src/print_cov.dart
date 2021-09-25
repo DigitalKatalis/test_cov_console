@@ -173,6 +173,9 @@ void printCov(List<String> lines, List<FileEntity> files) {
       PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
 }
 
+/// _printDir.
+///
+/// print directory [directory] & if [printFile] print also the [file]
 FileEntity _printDir(FileEntity file, String directory, bool printFile) {
   if (file.directory != directory) {
     _print(
@@ -196,6 +199,9 @@ FileEntity _printDir(FileEntity file, String directory, bool printFile) {
   return file;
 }
 
+/// _printFile.
+///
+/// print test coverage result [data0] to console with some formatting
 _Data _printFile(_Data data0) {
   final functions = _formatPercent(data0.functionHit, data0.functionFound);
   final lines = _formatPercent(data0.linesHit, data0.linesFound);
@@ -218,6 +224,10 @@ _Data _printFile(_Data data0) {
   return data0;
 }
 
+/// _formatPercent.
+///
+/// return the percentage of [hit] / [found] with 2 digit decimal
+/// return 100.00 if [found] == 0
 String _formatPercent(int hit, int found) {
   if (found == 0) {
     return '${PrintCovConstants.hundred} ';
@@ -225,12 +235,20 @@ String _formatPercent(int hit, int found) {
   return '${(hit / found * 100).toStringAsFixed(2)} ';
 }
 
+/// _formatString.
+///
+/// return the substring [input] with prefix [more]
+/// if the string length is more than [length]
 String _formatString(String input, int length, String more) {
   return input.length <= length
       ? input
       : '$more${input.substring(input.length - length + more.length)}';
 }
 
+/// _print.
+///
+/// print to console one line of test coverage result
+/// [file]  | [branch]  |  [function] | [lines] |
 void _print(String file, String branch, String function, String lines,
     String uncovered, String filler) {
   print('${file.padRight(PrintCovConstants.fileLen, filler)}|'
@@ -260,6 +278,9 @@ Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
   return list;
 }
 
+/// _isExcluded.
+///
+/// return true if [file] is in [excludes] list.
 bool _isExcluded(List<String> excludes, String file) {
   bool result = false;
 
