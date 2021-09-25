@@ -49,7 +49,7 @@ class _Data {
   int branchHit = 0;
   String uncoveredLines = PrintCovConstants.emptyString;
   String uncoveredBranch = PrintCovConstants.emptyString;
-  FileEntity file;
+  FileEntity file = FileEntity('/');
 
   _Data(FileEntity file) {
     this.file = file;

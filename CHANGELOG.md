@@ -1,3 +1,7 @@
+## 0.0.8 - 24 Sep 2021
+
+* Fixed some minor issue and documentation.
+
 ## 0.0.7 - 17 Aug 2021
 
 * Remove lib dependency.
