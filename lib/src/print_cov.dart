@@ -36,7 +36,7 @@ class FileEntity {
 
   @override
   String toString() {
-    return '$directory/$fileName';
+    return '$directory$fileName';
   }
 }
 
@@ -87,6 +87,9 @@ void printCov(List<String> lines, List<FileEntity> files) {
       PrintCovConstants.space);
   _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
       PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
+  final listFiles = lines
+      .where((line) => line.startsWith('${PrintCovConstants.SF}:'))
+      .toList();
   final result = lines.fold(<_Data>[
     _Data(FileEntity(PrintCovConstants.emptyString)),
     _Data(FileEntity(PrintCovConstants.emptyString))
@@ -100,7 +103,8 @@ void printCov(List<String> lines, List<FileEntity> files) {
         for (var i = idx; i < files.length; i++) {
           idx = i;
           if (file.compareTo(files[i]) > 0) {
-            _printDir(files[i], data0.getDirectory(), true);
+            _printDir(files[i], data0.getDirectory(),
+                !listFiles.contains('${PrintCovConstants.SF}:${files[i]}'));
             data0.file.directory = files[i].directory;
           } else {
             break;

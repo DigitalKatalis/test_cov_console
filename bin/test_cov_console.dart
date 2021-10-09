@@ -30,8 +30,10 @@ Future main(List<String> arguments) async {
   final slash = Platform.isWindows ? '\\' : '/';
   String lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
 
-  final lines = await File(lcovFile).readAsLines();
+  List<String> lines = await File(lcovFile).readAsLines();
+  if (Platform.isWindows) {
+    lines = lines.map((line) => line.replaceAll('\\', '/')).toList();
+  }
   final files = await getFiles('lib', patterns);
-
   printCov(lines, files);
 }
