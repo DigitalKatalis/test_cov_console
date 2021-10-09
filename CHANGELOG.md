@@ -1,3 +1,7 @@
+## 0.0.9 - 9 Oct 2021
+
+* Fixed duplicate issue.
+
 ## 0.0.8 - 24 Sep 2021
 
 * Fixed some minor issue and documentation.

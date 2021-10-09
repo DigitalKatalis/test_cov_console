@@ -6,7 +6,7 @@ This small dart tools is used to generate Flutter Coverage Test report to consol
 Add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 ```
 dev_dependencies:
-  test_cov_console: ^0.0.8
+  test_cov_console: ^0.0.9
 ```
 
 ## How to run
