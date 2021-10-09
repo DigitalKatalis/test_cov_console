@@ -58,6 +58,14 @@ List<FileEntity> files = [
 ];
 
 const String lcovFile = '''
+SF:lib/src/parser_constants.dart
+DA:14,3
+DA:15,1
+DA:16,1
+DA:25,1
+LF:4
+LH:4
+end_of_record
 SF:lib/src/parser.dart
 DA:6,1
 DA:8,1
@@ -84,14 +92,6 @@ DA:56,2
 DA:58,1
 LF:23
 LH:22
-end_of_record
-SF:lib/src/parser_constants.dart
-DA:14,3
-DA:15,1
-DA:16,1
-DA:25,1
-LF:4
-LH:4
 end_of_record
 SF:lib/src/print_cov.dart
 DA:16,1
@@ -234,8 +234,8 @@ File                                         |% Branch | % Funcs | % Lines | Unc
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
  a_print_cov.dart                            |    0.00 |    0.00 |    0.00 |    no unit testing|
- parser.dart                                 |  100.00 |  100.00 |   95.65 |                 10|
  parser_constants.dart                       |  100.00 |  100.00 |  100.00 |                   |
+ parser.dart                                 |  100.00 |  100.00 |   95.65 |                 10|
  print_cov.dart                              |  100.00 |  100.00 |   85.27 |...,205,206,207,231|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
