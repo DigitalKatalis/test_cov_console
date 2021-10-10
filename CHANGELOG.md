@@ -1,3 +1,7 @@
+## 0.1.0 - 10 Oct 2021
+
+* Support for multiple lcov.info files
+
 ## 0.0.10 - 10 Oct 2021
 
 * Fixed un-sorted directory issue.
