@@ -7,12 +7,13 @@ class Parser {
 
   /// parse.
   ///
-  /// Parse [arguments] in GNU (--help, --file, --exclude)
-  /// and POSIX (-h, -f, -e) style options
+  /// Parse [arguments] in GNU (--help, --file, --exclude, --multi)
+  /// and POSIX (-h, -f, -e, -m) style options
   /// to Map<String, dynamic>, for instance
   /// {
-  ///   'file': '/dir1/file1.dart'
-  ///   'exclude': ['string1', 'string2' ]
+  ///   'file': '/dir1/file1.dart',
+  ///   'exclude': ['string1', 'string2' ],
+  ///   'multi': 'multi'
   /// }
   Map<String, dynamic> parse() {
     if (arguments.isEmpty) {
@@ -28,7 +29,11 @@ class Parser {
     //Replace all option 1 format (-f value) with option 2 format (--file=value)
     String strArg = arguments.join(' ');
     for (final opt in ParserConstants.fieldMap) {
-      strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2}=');
+      if (opt.isNoValue) {
+        strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2} ');
+      } else {
+        strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2}=');
+      }
     }
 
     final args = strArg.split(' ');
@@ -37,7 +42,12 @@ class Parser {
       final arg = item.toLowerCase();
       for (final opt in ParserConstants.fieldMap) {
         if (arg.startsWith('--${opt.opt2}')) {
-          result['${opt.opt2}'] = _getValues(arg, '--${opt.opt2}=', opt.isList);
+          if (opt.isNoValue) {
+            result['${opt.opt2}'] = '${opt.opt2}';
+          } else {
+            result['${opt.opt2}'] =
+                _getValues(arg, '--${opt.opt2}=', opt.isList);
+          }
           break;
         }
       }

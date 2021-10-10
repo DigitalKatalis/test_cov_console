@@ -74,12 +74,13 @@ class _Data {
 /// Generate coverage test report from lcov.info file to console.
 /// [lines] is the list of string from lcov.info file
 /// [files] is the list of file in string that already filter by exclude params.
-void printCov(List<String> lines, List<FileEntity> files) {
+/// [module] is the module name
+void printCov(List<String> lines, List<FileEntity> files, String module) {
   var idx = 0;
   _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
       PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash);
   _print(
-      PrintCovConstants.file,
+      '${PrintCovConstants.file}$module',
       PrintCovConstants.branch,
       PrintCovConstants.functions,
       PrintCovConstants.lines,
@@ -278,7 +279,7 @@ Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
   files.forEach((element) {
     final String file = element.uri.toString();
     if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
-        !_isExcluded(excludes, file)) {
+        !_isContain(excludes, file)) {
       final file = FileEntity(replaceSlash(element.uri.toString()));
       list.add(file);
     }
@@ -298,13 +299,13 @@ String replaceSlash(String input) {
   return result;
 }
 
-/// _isExcluded.
+/// _isContain.
 ///
-/// return true if [file] is in [excludes] list.
-bool _isExcluded(List<String> excludes, String file) {
+/// return true if [file] is in [list] list.
+bool _isContain(List<String> list, String file) {
   bool result = false;
 
-  for (var item in excludes) {
+  for (var item in list) {
     if (file.contains(item)) {
       result = true;
       break;
@@ -312,4 +313,22 @@ bool _isExcluded(List<String> excludes, String file) {
   }
 
   return result;
+}
+
+/// getLCov.
+///
+/// Get all [lcov] files on [path] directory, recursive to all sub-directories.
+Future<List<FileEntity>> getLCov(String path, String lcov) async {
+  final dir = Directory(path);
+  final files = await dir.list(recursive: true).toList();
+  final List<FileEntity> list = [];
+  files.forEach((element) {
+    final String file = element.uri.toString();
+    if (file.endsWith(lcov)) {
+      final file = FileEntity(replaceSlash(element.uri.toString()));
+      list.add(file);
+    }
+  });
+  list.sort((a, b) => a.compareTo(b));
+  return list;
 }
