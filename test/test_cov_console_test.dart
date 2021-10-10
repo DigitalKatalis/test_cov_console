@@ -44,9 +44,9 @@ void Function() overridePrint(void testFn()) => () {
     };
 
 List<FileEntity> files0 = [
+  FileEntity('lib/test_cov_console.dart'),
   FileEntity('lib/src/parser.dart'),
   FileEntity('lib/src/print_cov.dart'),
-  FileEntity('lib/test_cov_console.dart'),
 ];
 
 List<FileEntity> files = [

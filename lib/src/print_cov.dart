@@ -165,8 +165,12 @@ void printCov(List<String> lines, List<FileEntity> files) {
     return [data0, data[1]];
   });
   if (idx < files.length) {
+    String lastDir = result[0].getDirectory();
     for (var i = idx; i < files.length; i++) {
-      _printDir(files[i], result[0].getDirectory(), true);
+      _printDir(files[i], lastDir, true);
+      if (lastDir != files[i].directory) {
+        lastDir = files[i].directory;
+      }
     }
   }
   _print(PrintCovConstants.dash, PrintCovConstants.dash, PrintCovConstants.dash,
@@ -275,11 +279,23 @@ Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
     final String file = element.uri.toString();
     if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
         !_isExcluded(excludes, file)) {
-      final file = FileEntity(element.uri.toString());
+      final file = FileEntity(replaceSlash(element.uri.toString()));
       list.add(file);
     }
   });
+  list.sort((a, b) => a.compareTo(b));
   return list;
+}
+
+/// replaceSlash.
+///
+/// replace '\\' with '/' on Windows platform.
+String replaceSlash(String input) {
+  String result = input;
+  if (Platform.isWindows) {
+    result = result.replaceAll('\\', '/');
+  }
+  return result;
 }
 
 /// _isExcluded.
