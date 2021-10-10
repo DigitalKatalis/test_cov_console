@@ -1,3 +1,7 @@
+## 0.0.10 - 10 Oct 2021
+
+* Fixed un-sorted directory issue.
+
 ## 0.0.9 - 9 Oct 2021
 
 * Fixed duplicate issue.
