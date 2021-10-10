@@ -32,7 +32,7 @@ Future main(List<String> arguments) async {
 
   List<String> lines = await File(lcovFile).readAsLines();
   if (Platform.isWindows) {
-    lines = lines.map((line) => line = replaceSlash(line)).toList();
+    lines = lines.map((line) => replaceSlash(line)).toList();
   }
   final files = await getFiles('lib', patterns);
   printCov(lines, files);
