@@ -31,6 +31,8 @@ Future main(List<String> arguments) async {
   final slash = Platform.isWindows ? '\\' : '/';
   String lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
 
+  final isCsv = args[ParserConstants.csv] == ParserConstants.csv;
+
   if (args[ParserConstants.multi] == ParserConstants.multi) {
     final files = await getLCov('./', replaceSlash(lcovFile));
     for (final file in files) {
@@ -40,19 +42,20 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
-      await _printSingleLCov(lCovFullPath, patterns, libFullPath, ' - $dir -');
+      await _printSingleLCov(
+          lCovFullPath, patterns, libFullPath, ' - $dir -', isCsv);
     }
   } else {
-    await _printSingleLCov(lcovFile, patterns, 'lib', '');
+    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv);
   }
 }
 
-Future<void> _printSingleLCov(
-    String lcovFile, List<String> patterns, String lib, String module) async {
+Future<void> _printSingleLCov(String lcovFile, List<String> patterns,
+    String lib, String module, bool isCsv) async {
   List<String> lines = await File(lcovFile).readAsLines();
   if (Platform.isWindows) {
     lines = lines.map((line) => replaceSlash(line)).toList();
   }
   final files = await getFiles(lib, patterns);
-  printCov(lines, files, module);
+  printCov(lines, files, module, isCsv);
 }
