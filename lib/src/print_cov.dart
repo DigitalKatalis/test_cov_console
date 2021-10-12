@@ -40,6 +40,14 @@ class FileEntity {
   }
 }
 
+class OutputFile {
+  static File outputFile;
+
+  static Future<void> write(String input) async {
+    await outputFile.writeAsString(input);
+  }
+}
+
 class _Data {
   int functionFound = 0;
   int functionHit = 0;
@@ -294,6 +302,7 @@ String _formatString(String input, int length, String more) {
 void _print(String file, String branch, String function, String lines,
     String uncovered, String filler, bool isCsv) {
   if (isCsv) {
+    OutputFile.write('$file,$branch,$function,$lines,$uncovered\n');
   } else {
     print('${file.padRight(PrintCovConstants.fileLen, filler)}|'
         '${branch.padLeft(PrintCovConstants.percentLen, filler)}|'

@@ -29,12 +29,18 @@ Future main(List<String> arguments) async {
   final List<String> patterns = args[ParserConstants.exclude] ?? [];
 
   final slash = Platform.isWindows ? '\\' : '/';
-  String lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
+  final lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
 
   final isCsv = args[ParserConstants.csv] == ParserConstants.csv;
+  final csvFile =
+      args[ParserConstants.csvFile] ?? 'coverage${slash}test_cov_console.csv';
+
+  if (isCsv) {
+    OutputFile.outputFile = File(csvFile);
+  }
 
   if (args[ParserConstants.multi] == ParserConstants.multi) {
-    final files = await getLCov('./', replaceSlash(lcovFile));
+    final files = await getLCov('.$slash', replaceSlash(lcovFile));
     for (final file in files) {
       final dir = file
           .toString()

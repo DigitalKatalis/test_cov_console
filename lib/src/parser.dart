@@ -13,7 +13,9 @@ class Parser {
   /// {
   ///   'file': '/dir1/file1.dart',
   ///   'exclude': ['string1', 'string2' ],
-  ///   'multi': 'multi'
+  ///   'multi': 'multi',
+  ///   'csv': 'csv',
+  ///   'csvFile': '/dir2/file2'
   /// }
   Map<String, dynamic> parse() {
     if (arguments.isEmpty) {
@@ -30,7 +32,10 @@ class Parser {
     String strArg = arguments.join(' ');
     for (final opt in ParserConstants.fieldMap) {
       if (opt.isNoValue) {
-        strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2} ');
+        final opt1 = '-${opt.opt1}';
+        final opt2 = '--${opt.opt2}';
+        strArg = strArg.replaceAll('$opt1 ', '$opt2 ');
+        strArg = replaceLast(strArg, opt1, opt2);
       } else {
         strArg = strArg.replaceAll('-${opt.opt1} ', '--${opt.opt2}=');
       }
@@ -78,4 +83,15 @@ class Parser {
     }
     return value.replaceFirst(replace, '');
   }
+}
+
+/// replaceLast.
+///
+/// replace [oldVal] with [newVal] if [input] is ended with [oldVal]
+String replaceLast(String input, String oldVal, String newVal) {
+  String result = input;
+  if (input.endsWith(oldVal)) {
+    result = '${input.substring(0, input.length - oldVal.length)}$newVal';
+  }
+  return result;
 }
