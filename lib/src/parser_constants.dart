@@ -4,7 +4,7 @@ class ParserConstants {
   static const exclude = 'exclude';
   static const multi = 'multi';
   static const csv = 'csv';
-  static const csvFile = 'csvFile';
+  static const csvFile = 'output';
   static const String invalid = 'Error invalid parameter!\n';
   static const String helpPrint =
       'Generate coverage test report from lcov.info file to console.\n'

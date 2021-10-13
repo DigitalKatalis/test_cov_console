@@ -48,11 +48,16 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
+      final module = dir.isEmpty ? '' : ' - $dir -';
       await _printSingleLCov(
-          lCovFullPath, patterns, libFullPath, ' - $dir -', isCsv);
+          lCovFullPath, patterns, libFullPath, module, isCsv);
     }
   } else {
     await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv);
+  }
+
+  if (isCsv) {
+    OutputFile.saveFile();
   }
 }
 

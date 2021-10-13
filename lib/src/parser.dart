@@ -1,5 +1,8 @@
 import 'package:test_cov_console/src/parser_constants.dart';
 
+/// Parser.
+///
+/// class to parse the command line arguments to Map
 class Parser {
   final List<String> arguments;
 

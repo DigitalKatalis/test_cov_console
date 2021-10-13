@@ -40,14 +40,22 @@ class FileEntity {
   }
 }
 
+/// OutputFile.
+///
+/// Simple class to store the csv output to List
+/// and save it to csv file
 class OutputFile {
   static File outputFile;
+  static List<String> tmpFile = [];
 
-  static Future<void> write(String input) async {
-    await outputFile.writeAsString(input);
+  static Future<void> saveFile() async {
+    await outputFile.writeAsString(tmpFile.join());
   }
 }
 
+/// _Data.
+///
+/// Simple class to store the coverage information
 class _Data {
   int functionFound = 0;
   int functionHit = 0;
@@ -101,7 +109,8 @@ void printCov(
       PrintCovConstants.lines,
       PrintCovConstants.unCovered,
       PrintCovConstants.space,
-      isCsv);
+      isCsv,
+      isSave: true);
   _print(
       PrintCovConstants.dash,
       PrintCovConstants.dash,
@@ -233,7 +242,8 @@ FileEntity _printDir(
         PrintCovConstants.space,
         PrintCovConstants.space,
         PrintCovConstants.space,
-        isCsv);
+        isCsv,
+        isSave: true);
   }
   if (printFile) {
     _print(
@@ -243,7 +253,8 @@ FileEntity _printDir(
         PrintCovConstants.zeroDotZeros,
         PrintCovConstants.noUnitTesting,
         PrintCovConstants.space,
-        isCsv);
+        isCsv,
+        isSave: true);
   }
   return file;
 }
@@ -264,12 +275,17 @@ _Data _printFile(_Data data0, bool isCsv) {
   var uncovered = data0.uncoveredLines.isEmpty
       ? data0.uncoveredBranch
       : data0.uncoveredLines;
-  uncovered = _formatString(
-      uncovered, PrintCovConstants.uncoverLen, PrintCovConstants.dot3);
+  if (isCsv) {
+    uncovered = '"$uncovered"';
+  } else {
+    uncovered = _formatString(
+        uncovered, PrintCovConstants.uncoverLen, PrintCovConstants.dot3);
+  }
   final file = _formatString(' ${data0.getFileName()}',
       PrintCovConstants.fileLen, PrintCovConstants.emptyString);
-  _print(file, branch, functions, lines, uncovered, PrintCovConstants.space,
-      isCsv);
+  _print(
+      file, branch, functions, lines, uncovered, PrintCovConstants.space, isCsv,
+      isSave: true);
 
   return data0;
 }
@@ -299,10 +315,15 @@ String _formatString(String input, int length, String more) {
 ///
 /// print to console one line of test coverage result
 /// [file]  | [branch]  |  [function] | [lines] |
+/// when [isCsv] is true it will save to file if [isSave] is true
 void _print(String file, String branch, String function, String lines,
-    String uncovered, String filler, bool isCsv) {
+    String uncovered, String filler, bool isCsv,
+    {bool isSave = false}) {
   if (isCsv) {
-    OutputFile.write('$file,$branch,$function,$lines,$uncovered\n');
+    if (isSave) {
+      OutputFile.tmpFile.add('${file.trim()},${branch.trim()},'
+          '${function.trim()},${lines.trim()},$uncovered\n');
+    }
   } else {
     print('${file.padRight(PrintCovConstants.fileLen, filler)}|'
         '${branch.padLeft(PrintCovConstants.percentLen, filler)}|'
