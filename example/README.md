@@ -10,7 +10,7 @@ the only change is adding test_cov_console lib to pubspec.yaml.
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  test_cov_console: ^0.1.0
+  test_cov_console: ^0.1.1
 ```
 
 ## How to run
