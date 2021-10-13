@@ -6,7 +6,7 @@ This small dart tools is used to generate Flutter Coverage Test report to consol
 Add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 ```
 dev_dependencies:
-  test_cov_console: ^0.1.0
+  test_cov_console: ^0.1.1
 ```
 
 ## How to run
@@ -42,6 +42,9 @@ If not given a FILE, "coverage/lcov.info" will be used.
 -e, --exclude=<STRING1,STRING2,...>    a list of contains string for files without unit testing
                                        to be excluded from report
 -m, --multi                            report from multiple lcov.info files
+-c, --csv                              output to CSV file
+-o, --output=<CSV-FILE>                full path of output CSV file
+                                       if not given, "coverage/test_cov_console.csv" will be used
 -h, --help                             show this help
 ```
 ### example run the tool with parameters
@@ -113,4 +116,20 @@ lib/                                         |         |         |         |    
 ---------------------------------------------|---------|---------|---------|-------------------|
  All files with unit testing                 |  100.00 |  100.00 |   88.37 |                   |
 ---------------------------------------------|---------|---------|---------|-------------------|
+```
+
+### Output to CSV file (-c, --csv, -o, --output)
+```
+flutter pub run test_cov_console -c --output=coverage/test_coverage.csv
+
+#### sample CSV output file:
+File,% Branch,% Funcs,% Lines,Uncovered Line #s
+lib/,,,,
+test_cov_console.dart,0.00,0.00,0.00,no unit testing
+lib/src/,,,,
+parser.dart,100.00,100.00,97.22,"97"
+parser_constants.dart,100.00,100.00,100.00,""
+print_cov.dart,100.00,100.00,82.91,"29,49,51,52,171,174,177,180,183,184,185,186,187,188,279,324,325,387,388,389,390,391,392,393,394,395,398"
+print_cov_constants.dart,0.00,0.00,0.00,no unit testing
+All files with unit testing,100.00,100.00,86.07,""
 ```

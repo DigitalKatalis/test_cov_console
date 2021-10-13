@@ -1,3 +1,7 @@
+## 0.1.1 - 13 Oct 2021
+
+* Support for output to CSV file
+
 ## 0.1.0 - 10 Oct 2021
 
 * Support for multiple lcov.info files
