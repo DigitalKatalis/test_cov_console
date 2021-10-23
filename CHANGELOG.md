@@ -1,3 +1,7 @@
+## 0.1.3 - 23 Oct 2021
+
+* Fixed percentage calculation.
+
 ## 0.1.2 - 23 Oct 2021
 
 * Add new features:

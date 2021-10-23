@@ -240,15 +240,16 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
       isSummary);
 
   if (isSummary) {
-    final cov = _formatPercent(result[1].linesHit, result[1].linesFound);
     final mdl = module.isEmpty ? '' : '$module : ';
     if (min > 0) {
-      if (cov.compareTo('$min.00') >= 0) {
+      final cov = 100 * result[1].linesHit / result[1].linesFound;
+      if (cov >= min) {
         print('${mdl}PASSED');
       } else {
         print('${mdl}FAILED');
       }
     } else {
+      final cov = _formatPercent(result[1].linesHit, result[1].linesFound);
       print('$mdl$cov');
     }
   }

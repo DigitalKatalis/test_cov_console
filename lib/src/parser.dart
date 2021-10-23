@@ -109,7 +109,8 @@ class Parser {
 ///
 /// return firs element of [list] that start with [pattern]
 String contains(List<String> list, String pattern) {
-  final List<String> result = list.where((element) => element.startsWith(pattern)).toList();
+  final List<String> result =
+      list.where((element) => element.startsWith(pattern)).toList();
   return result.isEmpty ? '' : result.first;
 }
 
