@@ -50,10 +50,10 @@ Future main(List<String> arguments) async {
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
       final module = dir.isEmpty ? '' : ' - $dir -';
       await _printSingleLCov(
-          lCovFullPath, patterns, libFullPath, module, isCsv);
+          lCovFullPath, patterns, libFullPath, module, isCsv, args);
     }
   } else {
-    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv);
+    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv, args);
   }
 
   if (isCsv) {
@@ -61,12 +61,19 @@ Future main(List<String> arguments) async {
   }
 }
 
+/// _print report for single module
 Future<void> _printSingleLCov(String lcovFile, List<String> patterns,
-    String lib, String module, bool isCsv) async {
+    String lib, String module, bool isCsv, Map<String, dynamic> args) async {
   List<String> lines = await File(lcovFile).readAsLines();
   if (Platform.isWindows) {
     lines = lines.map((line) => replaceSlash(line)).toList();
   }
-  final files = await getFiles(lib, patterns);
-  printCov(lines, files, module, isCsv);
+  List<FileEntity> files = [];
+  final bool isSummary =
+      args[ParserConstants.pass] != null || args[ParserConstants.total] != null;
+  if (!isSummary && args[ParserConstants.ignore] == null) {
+    files = await getFiles(lib, patterns);
+  }
+  final min = int.parse(args[ParserConstants.pass] ?? '0');
+  printCov(lines, files, module, isCsv, isSummary, min);
 }

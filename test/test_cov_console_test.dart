@@ -11,7 +11,7 @@ void main() {
   final printout = output.split('\n');
   group('printCoverage', () {
     test('should print out with correct format & values', overridePrint(() {
-      printCov(lines, files, '', false);
+      printCov(lines, files, '', false, false, 0);
       expect(log, printout);
     }));
   });
