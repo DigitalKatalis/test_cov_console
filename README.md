@@ -6,7 +6,7 @@ This small dart tools is used to generate Flutter Coverage Test report to consol
 Add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 ```
 dev_dependencies:
-  test_cov_console: ^0.1.1
+  test_cov_console: ^0.1.2
 ```
 
 ## How to run
@@ -38,14 +38,20 @@ lib/                                         |         |         |         |    
 ## Optional parameter
 ```
 If not given a FILE, "coverage/lcov.info" will be used.
--f, --file=<FILE>                      the target lcov.info file to be reported
--e, --exclude=<STRING1,STRING2,...>    a list of contains string for files without unit testing
+-f, --file=<FILE>                      The target lcov.info file to be reported
+-e, --exclude=<STRING1,STRING2,...>    A list of contains string for files without unit testing
                                        to be excluded from report
--m, --multi                            report from multiple lcov.info files
--c, --csv                              output to CSV file
--o, --output=<CSV-FILE>                full path of output CSV file
-                                       if not given, "coverage/test_cov_console.csv" will be used
--h, --help                             show this help
+-i, --ignore                           It will not print any file without unit testing
+-m, --multi                            Report from multiple lcov.info files
+-c, --csv                              Output to CSV file
+-o, --output=<CSV-FILE>                Full path of output CSV file
+                                       If not given, "coverage/test_cov_console.csv" will be used
+-t, --total                            Print only the total coverage
+                                       Note: it will ignore all other option (if any), except -m
+-p, --pass=<MINIMUM>                   Print only the whether total coverage is passed MINIMUM value or not
+                                       If the value >= MINIMUM, it will print PASSED, otherwise FAILED
+                                       Note: it will ignore all other option (if any), except -m
+-h, --help                             Show this help
 ```
 ### example run the tool with parameters
 ```

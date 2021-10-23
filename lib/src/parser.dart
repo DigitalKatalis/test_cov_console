@@ -25,13 +25,13 @@ class Parser {
       return {};
     }
 
-    //Return for help option
+    /// Return for help option
     if (arguments.contains('-h') ||
         arguments.contains('--${ParserConstants.help}')) {
       return _returnHelp();
     }
 
-    //Replace all option 1 format (-f value) with option 2 format (--file=value)
+    /// Replace all option 1 format (-f value) with option 2 format (--file=value)
     String strArg = arguments.join(' ');
     for (final opt in ParserConstants.fieldMap) {
       if (opt.isNoValue) {
@@ -46,15 +46,32 @@ class Parser {
 
     final args = strArg.split(' ');
     final Map<String, dynamic> result = {};
+
+    /// For total & pass, it will ignore any other option, except 'multi'
+    final total = contains(args, '--${ParserConstants.total}');
+    final pass = contains(args, '--${ParserConstants.pass}');
+    final multi = contains(args, '--${ParserConstants.multi}');
+    if (total.isNotEmpty || pass.isNotEmpty) {
+      if (total.isNotEmpty) {
+        result[ParserConstants.total] = ParserConstants.total;
+      } else {
+        result[ParserConstants.pass] =
+            _getValues(pass, '--${ParserConstants.pass}=', false);
+      }
+      if (multi.isNotEmpty) {
+        result[ParserConstants.multi] = ParserConstants.multi;
+      }
+      return result;
+    }
+
     for (final item in args) {
       final arg = item.toLowerCase();
       for (final opt in ParserConstants.fieldMap) {
         if (arg.startsWith('--${opt.opt2}')) {
           if (opt.isNoValue) {
-            result['${opt.opt2}'] = '${opt.opt2}';
+            result[opt.opt2] = opt.opt2;
           } else {
-            result['${opt.opt2}'] =
-                _getValues(arg, '--${opt.opt2}=', opt.isList);
+            result[opt.opt2] = _getValues(arg, '--${opt.opt2}=', opt.isList);
           }
           break;
         }
@@ -86,6 +103,14 @@ class Parser {
     }
     return value.replaceFirst(replace, '');
   }
+}
+
+/// contains.
+///
+/// return firs element of [list] that start with [pattern]
+String contains(List<String> list, String pattern) {
+  final List<String> result = list.where((element) => element.startsWith(pattern)).toList();
+  return result.isEmpty ? '' : result.first;
 }
 
 /// replaceLast.
