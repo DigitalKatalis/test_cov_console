@@ -9,10 +9,6 @@ environment:
 executables:
   test_cov_console:
 
-dependencies:
-  flutter:
-    sdk: flutter
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
