@@ -50,5 +50,17 @@ void main() {
       expect(
           args.toString().startsWith('{help: Error invalid parameter!'), true);
     });
+
+    test('should return total & multi and remove other', () async {
+      final input = '-f test -t -m'.split(' ');
+      final args = Parser(input).parse();
+      expect(args, {'total': 'total', 'multi': 'multi'});
+    });
+
+    test('should return pass & multi and remove other', () async {
+      final input = '-f test -p 80 -m'.split(' ');
+      final args = Parser(input).parse();
+      expect(args, {'pass': '80', 'multi': 'multi'});
+    });
   });
 }

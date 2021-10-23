@@ -6,13 +6,44 @@ import 'package:test_cov_console/test_cov_console.dart';
 
 var log = <String>[];
 
+final slash = Platform.isWindows ? '\\' : '/';
+
 void main() {
   final lines = lcovFile.split('\n');
   final printout = output.split('\n');
+  setUp(() {
+    log = [];
+    OutputFile.tmpFile = [];
+  });
+
   group('printCoverage', () {
     test('should print out with correct format & values', overridePrint(() {
       printCov(lines, files, '', false, false, 0);
       expect(log, printout);
+    }));
+
+    test('should print out with correct format & values - csv',
+        overridePrint(() {
+      printCov(lines, files, '', true, false, 0);
+      expect(log, []);
+      expect(OutputFile.tmpFile, outFiles);
+    }));
+
+    test('should print out with correct format & values - total',
+        overridePrint(() {
+      printCov(lines, files, '', false, true, 0);
+      expect(log, ['87.18 ']);
+    }));
+
+    test('should print out with correct format & values - pass',
+        overridePrint(() {
+      printCov(lines, files, '', false, true, 80);
+      expect(log, ['PASSED']);
+    }));
+
+    test('should print out with correct format & values', overridePrint(() {
+      printCov(lines, files, '', false, true, 90);
+      expect(log, ['FAILED']);
     }));
   });
 
@@ -24,10 +55,19 @@ void main() {
       expect(result[1].toString(), '$dir${files0[1].toString()}');
     });
   });
+
+  group('getLCov', () {
+    test('should return file list', () async {
+      final dir = _getCurrentDir();
+      final lcov = 'coverage/lcov.info';
+      final result = await getLCov('$dir', lcov);
+      expect(result[0].toString(), lcov);
+      expect(result[1].toString(), 'example/$lcov');
+    });
+  });
 }
 
 String _getCurrentDir() {
-  final slash = Platform.isWindows ? '\\' : '/';
   final curDir = Directory.current.path.toString();
   if (curDir.split(slash).last == 'test') {
     return '../';
@@ -55,6 +95,27 @@ List<FileEntity> files = [
   FileEntity('lib/src/parser_constants.dart'),
   FileEntity('lib/src/print_cov.dart'),
   FileEntity('lib/test_cov_console.dart'),
+];
+
+const outFiles = [
+  'File,% Branch,% Funcs,% Lines,Uncovered Line #s \n'
+      '',
+  'lib/src/,,,, \n'
+      '',
+  'a_print_cov.dart,0.00,0.00,0.00,no unit testing\n'
+      '',
+  'parser_constants.dart,100.00,100.00,100.00,""\n'
+      '',
+  'parser.dart,100.00,100.00,95.65,"10"\n'
+      '',
+  'print_cov.dart,100.00,100.00,85.27,"31,34,103,104,111,132,135,138,141,144,145,146,147,148,149,205,206,207,231"\n'
+      '',
+  'lib/,,,, \n'
+      '',
+  'test_cov_console.dart,0.00,0.00,0.00,no unit testing\n'
+      '',
+  'All files with unit testing,100.00,100.00,87.18,""\n'
+      ''
 ];
 
 const String lcovFile = '''
