@@ -1,3 +1,10 @@
+## 0.1.2 - 23 Oct 2021
+
+* Add new features:
+ -i to not print any file without unit testing
+ -t to print the total coverage only
+ -p to print passed/failed of the total coverage only
+
 ## 0.1.1 - 13 Oct 2021
 
 * Support for output to CSV file
