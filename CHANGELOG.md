@@ -1,3 +1,7 @@
+## 0.1.4 - 25 Oct 2021
+
+* Remove flutter_test dev_dependency.
+
 ## 0.1.3 - 23 Oct 2021
 
 * Fixed percentage calculation.
