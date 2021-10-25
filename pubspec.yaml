@@ -10,5 +10,4 @@ executables:
   test_cov_console:
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  test:
