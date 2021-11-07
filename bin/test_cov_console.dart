@@ -50,9 +50,8 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
-      final module = dir.isEmpty ? '' : ' - $dir -';
       await _printSingleLCov(
-          lCovFullPath, patterns, libFullPath, module, isCsv, isLineOnly, args);
+          lCovFullPath, patterns, libFullPath, dir, isCsv, isLineOnly, args);
     }
   } else {
     await _printSingleLCov(
@@ -81,8 +80,9 @@ Future<void> _printSingleLCov(
   final bool isSummary =
       args[ParserConstants.pass] != null || args[ParserConstants.total] != null;
   if (!isSummary && args[ParserConstants.ignore] == null) {
-    files = await getFiles(lib, patterns);
+    files = await getFiles(lib, patterns, module);
   }
   final min = int.parse(args[ParserConstants.pass] ?? '0');
-  printCov(lines, files, module, isCsv, isSummary, min, isLineOnly);
+  printCov(lines, files, module.isEmpty ? '' : ' - $module -', isCsv, isSummary,
+      min, isLineOnly);
 }

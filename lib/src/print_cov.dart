@@ -412,7 +412,8 @@ void _print(
 /// Get all dart files on [path] directory (e.g. lib directory), recursive to all
 /// sub-directories.
 /// [exclude] is the list of string to filter/exclude any files (contain).
-Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
+Future<List<FileEntity>> getFiles(
+    String path, List<String> excludes, String module) async {
   final dir = Directory(path);
   final files = await dir.list(recursive: true).toList();
   final List<FileEntity> list = [];
@@ -420,7 +421,11 @@ Future<List<FileEntity>> getFiles(String path, List<String> excludes) async {
     final String file = element.uri.toString();
     if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
         !_isContain(excludes, file)) {
-      final file = FileEntity(replaceSlash(element.uri.toString()));
+      String strFile = replaceSlash(element.uri.toString());
+      if (module.isNotEmpty) {
+        strFile = strFile.replaceFirst('$module/', '');
+      }
+      final file = FileEntity(strFile);
       list.add(file);
     }
   });
