@@ -39,6 +39,8 @@ Future main(List<String> arguments) async {
     OutputFile.outputFile = File(csvFile);
   }
 
+  final isLineOnly = args[ParserConstants.line] == ParserConstants.line;
+
   if (args[ParserConstants.multi] == ParserConstants.multi) {
     final files = await getLCov('.$slash', replaceSlash(lcovFile));
     for (final file in files) {
@@ -48,12 +50,12 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
-      final module = dir.isEmpty ? '' : ' - $dir -';
       await _printSingleLCov(
-          lCovFullPath, patterns, libFullPath, module, isCsv, args);
+          lCovFullPath, patterns, libFullPath, dir, isCsv, isLineOnly, args);
     }
   } else {
-    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv, args);
+    await _printSingleLCov(
+        lcovFile, patterns, 'lib', '', isCsv, isLineOnly, args);
   }
 
   if (isCsv) {
@@ -62,8 +64,14 @@ Future main(List<String> arguments) async {
 }
 
 /// _print report for single module
-Future<void> _printSingleLCov(String lcovFile, List<String> patterns,
-    String lib, String module, bool isCsv, Map<String, dynamic> args) async {
+Future<void> _printSingleLCov(
+    String lcovFile,
+    List<String> patterns,
+    String lib,
+    String module,
+    bool isCsv,
+    bool isLineOnly,
+    Map<String, dynamic> args) async {
   List<String> lines = await File(lcovFile).readAsLines();
   if (Platform.isWindows) {
     lines = lines.map((line) => replaceSlash(line)).toList();
@@ -72,8 +80,9 @@ Future<void> _printSingleLCov(String lcovFile, List<String> patterns,
   final bool isSummary =
       args[ParserConstants.pass] != null || args[ParserConstants.total] != null;
   if (!isSummary && args[ParserConstants.ignore] == null) {
-    files = await getFiles(lib, patterns);
+    files = await getFiles(lib, patterns, module);
   }
   final min = int.parse(args[ParserConstants.pass] ?? '0');
-  printCov(lines, files, module, isCsv, isSummary, min);
+  printCov(lines, files, module.isEmpty ? '' : ' - $module -', isCsv, isSummary,
+      min, isLineOnly);
 }

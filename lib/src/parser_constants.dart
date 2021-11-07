@@ -3,6 +3,7 @@ class ParserConstants {
   static const file = 'file';
   static const exclude = 'exclude';
   static const ignore = 'ignore';
+  static const line = 'line';
   static const multi = 'multi';
   static const csv = 'csv';
   static const csvFile = 'output';
@@ -15,6 +16,8 @@ class ParserConstants {
       '-f, --file=<FILE>                      The target lcov.info file to be reported\n'
       '-e, --exclude=<STRING1,STRING2,...>    A list of contains string for files without unit testing\n'
       '                                       to be excluded from report\n'
+      '-l, --line                             It will print Lines & Uncovered Lines only\n'
+      '                                       Branch & Functions coverage percentage will not be printed\n'
       '-i, --ignore                           It will not print any file without unit testing\n'
       '-m, --multi                            Report from multiple lcov.info files\n'
       '-c, --csv                              Output to CSV file\n'
@@ -30,7 +33,8 @@ class ParserConstants {
   static List<Option> fieldMap = [
     Option('f', file, false, false),
     Option('e', exclude, true, false),
-    Option('i', ignore, true, true),
+    Option('i', ignore, false, true),
+    Option('l', line, false, true),
     Option('m', multi, false, true),
     Option('c', csv, false, true),
     Option('o', csvFile, false, false),

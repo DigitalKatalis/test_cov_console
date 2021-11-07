@@ -6,7 +6,7 @@ This small dart tools is used to generate Flutter Coverage Test report to consol
 Add a line like this to your package's pubspec.yaml (and run an implicit flutter pub get):
 ```
 dev_dependencies:
-  test_cov_console: ^0.1.4
+  test_cov_console: ^0.1.5
 ```
 
 ## How to run
@@ -41,6 +41,8 @@ If not given a FILE, "coverage/lcov.info" will be used.
 -f, --file=<FILE>                      The target lcov.info file to be reported
 -e, --exclude=<STRING1,STRING2,...>    A list of contains string for files without unit testing
                                        to be excluded from report
+-l, --line                             It will print Lines & Uncovered Lines only
+                                       Branch & Functions coverage percentage will not be printed
 -i, --ignore                           It will not print any file without unit testing
 -m, --multi                            Report from multiple lcov.info files
 -c, --csv                              Output to CSV file

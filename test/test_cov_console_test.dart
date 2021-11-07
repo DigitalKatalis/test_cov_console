@@ -18,31 +18,31 @@ void main() {
 
   group('printCoverage', () {
     test('should print out with correct format & values', overridePrint(() {
-      printCov(lines, files, '', false, false, 0);
+      printCov(lines, files, '', false, false, 0, false);
       expect(log, printout);
     }));
 
     test('should print out with correct format & values - csv',
         overridePrint(() {
-      printCov(lines, files, '', true, false, 0);
+      printCov(lines, files, '', true, false, 0, false);
       expect(log, []);
       expect(OutputFile.tmpFile, outFiles);
     }));
 
     test('should print out with correct format & values - total',
         overridePrint(() {
-      printCov(lines, files, '', false, true, 0);
+      printCov(lines, files, '', false, true, 0, false);
       expect(log, ['87.18 ']);
     }));
 
     test('should print out with correct format & values - pass',
         overridePrint(() {
-      printCov(lines, files, '', false, true, 80);
+      printCov(lines, files, '', false, true, 80, false);
       expect(log, ['PASSED']);
     }));
 
     test('should print out with correct format & values', overridePrint(() {
-      printCov(lines, files, '', false, true, 90);
+      printCov(lines, files, '', false, true, 90, false);
       expect(log, ['FAILED']);
     }));
   });
@@ -50,7 +50,7 @@ void main() {
   group('getFiles', () {
     test('should return file list with some exclusion', () async {
       final dir = _getCurrentDir();
-      final result = await getFiles('${dir}lib', ['constants']);
+      final result = await getFiles('${dir}lib', ['constants'], '');
       expect(result[0].toString(), '$dir${files0[0].toString()}');
       expect(result[1].toString(), '$dir${files0[1].toString()}');
     });
@@ -104,9 +104,9 @@ const outFiles = [
       '',
   'a_print_cov.dart,0.00,0.00,0.00,no unit testing\n'
       '',
-  'parser_constants.dart,100.00,100.00,100.00,""\n'
-      '',
   'parser.dart,100.00,100.00,95.65,"10"\n'
+      '',
+  'parser_constants.dart,100.00,100.00,100.00,""\n'
       '',
   'print_cov.dart,100.00,100.00,85.27,"31,34,103,104,111,132,135,138,141,144,145,146,147,148,149,205,206,207,231"\n'
       '',
@@ -295,8 +295,8 @@ File                                         |% Branch | % Funcs | % Lines | Unc
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
  a_print_cov.dart                            |    0.00 |    0.00 |    0.00 |    no unit testing|
- parser_constants.dart                       |  100.00 |  100.00 |  100.00 |                   |
  parser.dart                                 |  100.00 |  100.00 |   95.65 |                 10|
+ parser_constants.dart                       |  100.00 |  100.00 |  100.00 |                   |
  print_cov.dart                              |  100.00 |  100.00 |   85.27 |...,205,206,207,231|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
