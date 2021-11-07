@@ -18,31 +18,31 @@ void main() {
 
   group('printCoverage', () {
     test('should print out with correct format & values', overridePrint(() {
-      printCov(lines, files, '', false, false, 0);
+      printCov(lines, files, '', false, false, 0, false);
       expect(log, printout);
     }));
 
     test('should print out with correct format & values - csv',
         overridePrint(() {
-      printCov(lines, files, '', true, false, 0);
+      printCov(lines, files, '', true, false, 0, false);
       expect(log, []);
       expect(OutputFile.tmpFile, outFiles);
     }));
 
     test('should print out with correct format & values - total',
         overridePrint(() {
-      printCov(lines, files, '', false, true, 0);
+      printCov(lines, files, '', false, true, 0, false);
       expect(log, ['87.18 ']);
     }));
 
     test('should print out with correct format & values - pass',
         overridePrint(() {
-      printCov(lines, files, '', false, true, 80);
+      printCov(lines, files, '', false, true, 80, false);
       expect(log, ['PASSED']);
     }));
 
     test('should print out with correct format & values', overridePrint(() {
-      printCov(lines, files, '', false, true, 90);
+      printCov(lines, files, '', false, true, 90, false);
       expect(log, ['FAILED']);
     }));
   });
@@ -50,7 +50,7 @@ void main() {
   group('getFiles', () {
     test('should return file list with some exclusion', () async {
       final dir = _getCurrentDir();
-      final result = await getFiles('${dir}lib', ['constants']);
+      final result = await getFiles('${dir}lib', ['constants'], '');
       expect(result[0].toString(), '$dir${files0[0].toString()}');
       expect(result[1].toString(), '$dir${files0[1].toString()}');
     });
