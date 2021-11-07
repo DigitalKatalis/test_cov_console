@@ -1,3 +1,8 @@
+## 0.1.5 - 25 Oct 2021
+
+* Fixed duplicate directory on multi option
+* Add --line option to print lines coverage only
+
 ## 0.1.4 - 25 Oct 2021
 
 * Remove flutter_test dev_dependency.
