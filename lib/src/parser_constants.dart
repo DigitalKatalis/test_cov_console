@@ -16,7 +16,7 @@ class ParserConstants {
       '-f, --file=<FILE>                      The target lcov.info file to be reported\n'
       '-e, --exclude=<STRING1,STRING2,...>    A list of contains string for files without unit testing\n'
       '                                       to be excluded from report\n'
-      '-l, --line                             It will print Lines & Uncovered Line only\n'
+      '-l, --line                             It will print Lines & Uncovered Lines only\n'
       '                                       Branch & Functions percentage will not be printed\n'
       '-l, --ignore                           It will not print any file without unit testing\n'
       '-m, --multi                            Report from multiple lcov.info files\n'

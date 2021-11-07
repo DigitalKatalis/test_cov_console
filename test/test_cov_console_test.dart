@@ -104,9 +104,9 @@ const outFiles = [
       '',
   'a_print_cov.dart,0.00,0.00,0.00,no unit testing\n'
       '',
-  'parser_constants.dart,100.00,100.00,100.00,""\n'
-      '',
   'parser.dart,100.00,100.00,95.65,"10"\n'
+      '',
+  'parser_constants.dart,100.00,100.00,100.00,""\n'
       '',
   'print_cov.dart,100.00,100.00,85.27,"31,34,103,104,111,132,135,138,141,144,145,146,147,148,149,205,206,207,231"\n'
       '',
@@ -295,8 +295,8 @@ File                                         |% Branch | % Funcs | % Lines | Unc
 ---------------------------------------------|---------|---------|---------|-------------------|
 lib/src/                                     |         |         |         |                   |
  a_print_cov.dart                            |    0.00 |    0.00 |    0.00 |    no unit testing|
- parser_constants.dart                       |  100.00 |  100.00 |  100.00 |                   |
  parser.dart                                 |  100.00 |  100.00 |   95.65 |                 10|
+ parser_constants.dart                       |  100.00 |  100.00 |  100.00 |                   |
  print_cov.dart                              |  100.00 |  100.00 |   85.27 |...,205,206,207,231|
 lib/                                         |         |         |         |                   |
  test_cov_console.dart                       |    0.00 |    0.00 |    0.00 |    no unit testing|
