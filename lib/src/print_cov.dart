@@ -95,17 +95,19 @@ class _Data {
 /// [isSummary] is whether it will print the total coverage only or not
 /// [min] is it will print whether total coverage is passed/failed from this value
 void printCov(List<String> lines, List<FileEntity> files, String module,
-    bool isCsv, bool isSummary, int min) {
+    bool isCsv, bool isSummary, int min, bool isLineOnly) {
   var idx = 0;
   _print(
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      isCsv,
-      isSummary);
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isSummary,
+    isLineOnly,
+  );
   _print(
       '${PrintCovConstants.file}$module',
       PrintCovConstants.branch,
@@ -115,16 +117,19 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
       PrintCovConstants.space,
       isCsv,
       isSummary,
+      isLineOnly,
       isSave: true);
   _print(
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      isCsv,
-      isSummary);
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isSummary,
+    isLineOnly,
+  );
 
   final listFiles = lines
       .where((line) => line.startsWith('${PrintCovConstants.SF}:'))
@@ -143,11 +148,13 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
           idx = i;
           if (file.compareTo(files[i]) > 0) {
             _printDir(
-                files[i],
-                data0.getDirectory(),
-                !listFiles.contains('${PrintCovConstants.SF}:${files[i]}'),
-                isCsv,
-                isSummary);
+              files[i],
+              data0.getDirectory(),
+              !listFiles.contains('${PrintCovConstants.SF}:${files[i]}'),
+              isCsv,
+              isSummary,
+              isLineOnly,
+            );
             data0.file.directory = files[i].directory;
           } else {
             break;
@@ -157,8 +164,8 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
             (idx == (files.length - 1) && file.compareTo(files[idx]) > 0)) {
           idx = idx + 1;
         }
-        final result =
-            _printDir(file, data0.getDirectory(), false, isCsv, isSummary);
+        final result = _printDir(
+            file, data0.getDirectory(), false, isCsv, isSummary, isLineOnly);
         data0.file = result;
         break;
       case PrintCovConstants.DA:
@@ -199,7 +206,7 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
         break;
       case PrintCovConstants.endOfRecord:
         {
-          data0 = _printFile(data0, isCsv, isSummary);
+          data0 = _printFile(data0, isCsv, isSummary, isLineOnly);
           data[1].total(data0);
           data0 = _Data(data0.file);
         }
@@ -212,32 +219,36 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
   if (idx < files.length) {
     String lastDir = result[0].getDirectory();
     for (var i = idx; i < files.length; i++) {
-      _printDir(files[i], lastDir, true, isCsv, isSummary);
+      _printDir(files[i], lastDir, true, isCsv, isSummary, isLineOnly);
       if (lastDir != files[i].directory) {
         lastDir = files[i].directory;
       }
     }
   }
   _print(
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      isCsv,
-      isSummary);
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isSummary,
+    isLineOnly,
+  );
   result[1].file = FileEntity(PrintCovConstants.allFiles);
-  _printFile(result[1], isCsv, isSummary);
+  _printFile(result[1], isCsv, isSummary, isLineOnly);
   _print(
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      PrintCovConstants.dash,
-      isCsv,
-      isSummary);
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isSummary,
+    isLineOnly,
+  );
 
   if (isSummary) {
     final mdl = module.isEmpty ? '' : '$module : ';
@@ -259,13 +270,16 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
 ///
 /// print directory [directory] & if [printFile] print also the [file]
 FileEntity _printDir(FileEntity file, String directory, bool printFile,
-    bool isCsv, bool isSummary) {
+    bool isCsv, bool isSummary, bool isLineOnly) {
   if (isSummary) {
     return file;
   }
   if (file.directory != directory) {
     _print(
-        _formatString(file.directory, PrintCovConstants.fileLen,
+        _formatString(
+            file.directory,
+            PrintCovConstants.fileLen +
+                (isLineOnly ? (2 * PrintCovConstants.percentLen) : 0),
             PrintCovConstants.emptyString),
         PrintCovConstants.space,
         PrintCovConstants.space,
@@ -274,6 +288,7 @@ FileEntity _printDir(FileEntity file, String directory, bool printFile,
         PrintCovConstants.space,
         isCsv,
         isSummary,
+        isLineOnly,
         isSave: true);
   }
   if (printFile) {
@@ -286,6 +301,7 @@ FileEntity _printDir(FileEntity file, String directory, bool printFile,
         PrintCovConstants.space,
         isCsv,
         isSummary,
+        isLineOnly,
         isSave: true);
   }
   return file;
@@ -294,7 +310,7 @@ FileEntity _printDir(FileEntity file, String directory, bool printFile,
 /// _printFile.
 ///
 /// print test coverage result [data0] to console with some formatting
-_Data _printFile(_Data data0, bool isCsv, bool isSummary) {
+_Data _printFile(_Data data0, bool isCsv, bool isSummary, bool isLineOnly) {
   if (isSummary) {
     return data0;
   }
@@ -319,7 +335,7 @@ _Data _printFile(_Data data0, bool isCsv, bool isSummary) {
   final file = _formatString(' ${data0.getFileName()}',
       PrintCovConstants.fileLen, PrintCovConstants.emptyString);
   _print(file, branch, functions, lines, uncovered, PrintCovConstants.space,
-      isCsv, isSummary,
+      isCsv, isSummary, isLineOnly,
       isSave: true);
 
   return data0;
@@ -351,23 +367,43 @@ String _formatString(String input, int length, String more) {
 /// print to console one line of test coverage result
 /// [file]  | [branch]  |  [function] | [lines] |
 /// when [isCsv] is true it will save to file if [isSave] is true
-void _print(String file, String branch, String function, String lines,
-    String uncovered, String filler, bool isCsv, bool isSummary,
+void _print(
+    String file,
+    String branch,
+    String function,
+    String lines,
+    String uncovered,
+    String filler,
+    bool isCsv,
+    bool isSummary,
+    bool isLineOnly,
     {bool isSave = false}) {
   if (isSummary) {
     return;
   }
+  String output;
   if (isCsv) {
     if (isSave) {
-      OutputFile.tmpFile.add('${file.trim()},${branch.trim()},'
-          '${function.trim()},${lines.trim()},$uncovered\n');
+      output = '${file.trim()},${branch.trim()},'
+          '${function.trim()},${lines.trim()},$uncovered\n';
+      if (isLineOnly) {
+        output = '${file.trim()},${lines.trim()},$uncovered\n';
+      }
+      OutputFile.tmpFile.add(output);
     }
   } else {
-    print('${file.padRight(PrintCovConstants.fileLen, filler)}|'
+    output = '${file.padRight(PrintCovConstants.fileLen, filler)}|'
         '${branch.padLeft(PrintCovConstants.percentLen, filler)}|'
         '${function.padLeft(PrintCovConstants.percentLen, filler)}|'
         '${lines.padLeft(PrintCovConstants.percentLen, filler)}|'
-        '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)}|');
+        '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)}|';
+    if (isLineOnly) {
+      output =
+          '${file.padRight(PrintCovConstants.fileLen + 2 * PrintCovConstants.percentLen, filler)}|'
+          '${lines.padLeft(PrintCovConstants.percentLen, filler)}|'
+          '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)}|';
+    }
+    print(output);
   }
 }
 
