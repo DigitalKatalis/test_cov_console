@@ -32,14 +32,19 @@ Future main(List<String> arguments) async {
   final lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
 
   final isCsv = args[ParserConstants.csv] == ParserConstants.csv;
-  final csvFile =
-      args[ParserConstants.csvFile] ?? 'coverage${slash}test_cov_console.csv';
+  final csvFile = args[ParserConstants.csvFile] ?? 'coverage${slash}test_cov_console.csv';
 
-  if (isCsv) {
+  final isJacocoCsv = args[ParserConstants.jacocoCsv] == ParserConstants.jacocoCsv;
+
+  if (isCsv || isJacocoCsv) {
     OutputFile.outputFile = File(csvFile);
   }
 
   final isLineOnly = args[ParserConstants.line] == ParserConstants.line;
+
+  if (isJacocoCsv) {
+    printJacocoHeader();
+  }
 
   if (args[ParserConstants.multi] == ParserConstants.multi) {
     final files = await getLCov('.$slash', replaceSlash(lcovFile));
@@ -50,15 +55,13 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
-      await _printSingleLCov(
-          lCovFullPath, patterns, libFullPath, dir, isCsv, isLineOnly, args);
+      await _printSingleLCov(lCovFullPath, patterns, libFullPath, dir, isCsv, isJacocoCsv, isLineOnly, args);
     }
   } else {
-    await _printSingleLCov(
-        lcovFile, patterns, 'lib', '', isCsv, isLineOnly, args);
+    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
   }
 
-  if (isCsv) {
+  if (isCsv || isJacocoCsv) {
     OutputFile.saveFile();
   }
 }
@@ -70,6 +73,7 @@ Future<void> _printSingleLCov(
     String lib,
     String module,
     bool isCsv,
+    bool isJacocoCsv,
     bool isLineOnly,
     Map<String, dynamic> args) async {
   List<String> lines = await File(lcovFile).readAsLines();
@@ -83,6 +87,10 @@ Future<void> _printSingleLCov(
     files = await getFiles(lib, patterns, module);
   }
   final min = int.parse(args[ParserConstants.pass] ?? '0');
-  printCov(lines, files, module.isEmpty ? '' : ' - $module -', isCsv, isSummary,
-      min, isLineOnly);
+  if (!isJacocoCsv) {
+    printCov(lines, files, module.isEmpty ? '' : ' - $module -', isCsv, isSummary,
+        min, isLineOnly);
+  } else {
+    printJacocoCovCsv(lines, files, module);
+  }
 }

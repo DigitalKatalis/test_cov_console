@@ -7,6 +7,7 @@ class ParserConstants {
   static const multi = 'multi';
   static const csv = 'csv';
   static const csvFile = 'output';
+  static const jacocoCsv = 'jacocoCsv';
   static const total = 'total';
   static const pass = 'pass';
   static const String invalid = 'Error invalid parameter!\n';
@@ -37,6 +38,7 @@ class ParserConstants {
     Option('l', line, false, true),
     Option('m', multi, false, true),
     Option('c', csv, false, true),
+    Option('j', jacocoCsv, false, true),
     Option('o', csvFile, false, false),
     Option('t', total, false, true),
     Option('p', pass, false, false),

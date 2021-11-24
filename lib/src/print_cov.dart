@@ -83,6 +83,46 @@ class _Data {
   }
 }
 
+void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module) {
+  final dataList = _getCoverage(lines);
+
+  for(_Data data in dataList.values) {
+    String csv = ""
+    // group
+     + "$module,"
+    // package
+    + "${data.file.directory},"
+    // class
+    + "${data.file.fileName},"
+    // instruction missed
+    + "${data.linesHit - data.linesFound},"
+    // instruction covered
+    + "${data.linesFound},"
+    // branch missed
+    + "${data.branchFound - data.branchHit},"
+    // branch covered
+    + "${data.branchHit},"
+    // line missed
+    + "${data.linesHit - data.linesFound},"
+    // line covered
+    + "${data.linesFound},"
+    // complexity missed
+     + "${data.branchFound - data.branchHit},"
+    // complexity covered
+    + "${data.branchHit},"
+    // method missed
+    + "${data.functionFound - data.functionHit},"
+    // method covered
+    + "${data.functionHit}";
+
+    _printValue(csv);
+  }
+}
+
+void printJacocoHeader() {
+  _printValue("GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED");
+}
+
 /// printCoverage.
 ///
 /// Generate coverage test report from lcov.info file to console.
@@ -349,6 +389,10 @@ String _formatString(String input, int length, String more) {
   return input.length <= length
       ? input
       : '$more${input.substring(input.length - length + more.length)}';
+}
+
+void _printValue(String value) {
+  OutputFile.tmpFile.add(value);
 }
 
 /// _print.
