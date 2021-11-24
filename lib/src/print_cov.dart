@@ -102,7 +102,7 @@ void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module
           // class
           + "${data.file.fileName},"
           // instruction missed
-          + "${data.linesHit - data.linesFound},"
+          + "${data.linesFound - data.linesHit},"
           // instruction covered
           + "${data.linesFound},"
           // branch missed
@@ -110,7 +110,7 @@ void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module
           // branch covered
           + "${data.branchHit},"
           // line missed
-          + "${data.linesHit - data.linesFound},"
+          + "${data.linesFound - data.linesHit},"
           // line covered
           + "${data.linesFound},"
           // complexity missed
