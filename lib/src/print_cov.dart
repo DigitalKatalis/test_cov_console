@@ -446,11 +446,14 @@ Future<List<FileEntity>> getLCov(String path, String lcov) async {
   final files = await dir.list(recursive: true).toList();
   final List<FileEntity> list = [];
   files.forEach((element) {
-    final String file = element.uri.toString();
-    if (file.endsWith(lcov)) {
-      if (FileSystemEntity.typeSync(file) == FileSystemEntityType.file) {
+    final String fileName = element.uri.toString();
+    if (fileName.endsWith(lcov)) {
+      if (FileSystemEntity.typeSync(fileName) == FileSystemEntityType.file) {
+        print("Adding $fileName to list");
         final file = FileEntity(replaceSlash(element.uri.toString()));
         list.add(file);
+      } else {
+        print("$fileName is not a file...");
       }
     }
   });
