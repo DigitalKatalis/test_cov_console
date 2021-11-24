@@ -91,7 +91,7 @@ void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module
       _Data data = dataList[file.toString()];
       if (data == null) {
         data = _Data(file);
-        data.linesFound = File(file.toString()).readAsLinesSync().length;
+        data.linesFound = File(module + "/" + file.toString()).readAsLinesSync().length;
       }
 
       String csv = ""
