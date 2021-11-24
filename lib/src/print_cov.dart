@@ -448,8 +448,10 @@ Future<List<FileEntity>> getLCov(String path, String lcov) async {
   files.forEach((element) {
     final String file = element.uri.toString();
     if (file.endsWith(lcov)) {
-      final file = FileEntity(replaceSlash(element.uri.toString()));
-      list.add(file);
+      if (FileSystemEntity.typeSync(file) == FileSystemEntityType.file) {
+        final file = FileEntity(replaceSlash(element.uri.toString()));
+        list.add(file);
+      }
     }
   });
   list.sort((a, b) => a.compareTo(b));
