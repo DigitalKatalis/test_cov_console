@@ -449,12 +449,12 @@ Future<List<FileEntity>> getLCov(String path, String lcov) async {
     final String fileName = element.uri.toString();
     if (fileName.endsWith(lcov)) {
       if (FileSystemEntity.typeSync(fileName) == FileSystemEntityType.file && !fileName.contains(".symlinks")) {
-        print("Adding $fileName to list");
+        //print("Adding $fileName to list");
         final file = FileEntity(replaceSlash(element.uri.toString()));
         list.add(file);
-      } else {
-        print("$fileName is not a file...");
-      }
+      }// else {
+        //print("$fileName is not a file...");
+      //}
     }
   });
   list.sort((a, b) => a.compareTo(b));
