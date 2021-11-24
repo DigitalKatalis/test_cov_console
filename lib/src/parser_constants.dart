@@ -7,7 +7,7 @@ class ParserConstants {
   static const multi = 'multi';
   static const csv = 'csv';
   static const csvFile = 'output';
-  static const jacocoCsv = 'jacocoCsv';
+  static const jacocoCsv = 'jacoco';
   static const total = 'total';
   static const pass = 'pass';
   static const String invalid = 'Error invalid parameter!\n';
@@ -22,6 +22,7 @@ class ParserConstants {
       '-i, --ignore                           It will not print any file without unit testing\n'
       '-m, --multi                            Report from multiple lcov.info files\n'
       '-c, --csv                              Output to CSV file\n'
+      '-j, --jacocoCsv                        Output to jacoco-formatted CSV file\n'
       '-o, --output=<CSV-FILE>                Full path of output CSV file\n'
       '                                       If not given, "coverage/test_cov_console.csv" will be used\n'
       '-t, --total                            Print only the total coverage\n'
