@@ -86,36 +86,44 @@ class _Data {
 void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module) {
   final dataList = _getCoverage(lines);
 
-  for(_Data data in dataList.values) {
-    String csv = ""
-    // group
-     + "$module,"
-    // package
-    + "${data.file.directory},"
-    // class
-    + "${data.file.fileName},"
-    // instruction missed
-    + "${data.linesHit - data.linesFound},"
-    // instruction covered
-    + "${data.linesFound},"
-    // branch missed
-    + "${data.branchFound - data.branchHit},"
-    // branch covered
-    + "${data.branchHit},"
-    // line missed
-    + "${data.linesHit - data.linesFound},"
-    // line covered
-    + "${data.linesFound},"
-    // complexity missed
-     + "${data.branchFound - data.branchHit},"
-    // complexity covered
-    + "${data.branchHit},"
-    // method missed
-    + "${data.functionFound - data.functionHit},"
-    // method covered
-    + "${data.functionHit}";
+  for (final file in files) {
+    if (!file.fileName.contains("All files")) {
+      _Data data = dataList[file.toString()];
+      if (data == null) {
+        data = _Data(file);
+        data.linesFound = File(file.toString()).readAsLinesSync().length;
+      }
 
-    _printValue(csv);
+      String csv = ""
+          // group
+          + "$module,"
+          // package
+          + "${data.file.directory},"
+          // class
+          + "${data.file.fileName},"
+          // instruction missed
+          + "${data.linesHit - data.linesFound},"
+          // instruction covered
+          + "${data.linesFound},"
+          // branch missed
+          + "${data.branchFound - data.branchHit},"
+          // branch covered
+          + "${data.branchHit},"
+          // line missed
+          + "${data.linesHit - data.linesFound},"
+          // line covered
+          + "${data.linesFound},"
+          // complexity missed
+          + "${data.branchFound - data.branchHit},"
+          // complexity covered
+          + "${data.branchHit},"
+          // method missed
+          + "${data.functionFound - data.functionHit},"
+          // method covered
+          + "${data.functionHit}";
+
+      _printValue(csv);
+    }
   }
 }
 
@@ -392,7 +400,7 @@ String _formatString(String input, int length, String more) {
 }
 
 void _printValue(String value) {
-  OutputFile.tmpFile.add(value);
+  OutputFile.tmpFile.add("$value\n");
 }
 
 /// _print.
