@@ -448,7 +448,7 @@ Future<List<FileEntity>> getLCov(String path, String lcov) async {
   files.forEach((element) {
     final String fileName = element.uri.toString();
     if (fileName.endsWith(lcov)) {
-      if (FileSystemEntity.typeSync(fileName) == FileSystemEntityType.file) {
+      if (FileSystemEntity.typeSync(fileName) == FileSystemEntityType.file && !fileName.contains(".symlinks")) {
         print("Adding $fileName to list");
         final file = FileEntity(replaceSlash(element.uri.toString()));
         list.add(file);
