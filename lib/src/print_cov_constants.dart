@@ -32,8 +32,8 @@ class PrintCovConstants {
   static const noUnitTesting = 'no unit testing';
   static const allFiles = 'All files with unit testing';
   static const file = 'File';
-  static const branch = '% Branch ';
-  static const functions = '% Funcs ';
-  static const lines = '% Lines ';
-  static const unCovered = 'Uncovered Line #s ';
+  static const branch = '% Branch';
+  static const functions = '% Funcs';
+  static const lines = '% Lines';
+  static const unCovered = 'Uncovered Line #s';
 }

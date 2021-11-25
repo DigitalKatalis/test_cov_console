@@ -225,12 +225,12 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
   //   isLineOnly,
   // );
   _print(
-      "**${PrintCovConstants.file}$module**",
+      "**${PrintCovConstants.file}${module}**",
       "**" + PrintCovConstants.branch + "**",
-      "**" +PrintCovConstants.functions + "**",
-      "**" +PrintCovConstants.lines + "**",
-      "**" +PrintCovConstants.unCovered + "**",
-      "**" +PrintCovConstants.space + "**",
+      "**" + PrintCovConstants.functions + "**",
+      "**" + PrintCovConstants.lines + "**",
+      "**" + PrintCovConstants.unCovered + "**",
+      "**" + PrintCovConstants.space + "**",
       isCsv,
       isLineOnly,
       isSave: true);
