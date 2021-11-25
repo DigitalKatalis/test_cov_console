@@ -198,16 +198,16 @@ void _printTotal(bool isCsv, bool isLineOnly, _Data totalData) {
   // );
   totalData.file = FileEntity(PrintCovConstants.allFiles);
   _printFile(totalData, isCsv, isLineOnly);
-  // _print(
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   isCsv,
-  //   isLineOnly,
-  // );
+  _print(
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isLineOnly,
+  );
 }
 
 /// _printHeader
