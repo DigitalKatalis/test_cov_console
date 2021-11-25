@@ -225,7 +225,7 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
   //   isLineOnly,
   // );
   _print(
-      "**${PrintCovConstants.file}${module}**",
+      "**" + "${PrintCovConstants.file}$module" + "**",
       "**" + PrintCovConstants.branch + "**",
       "**" + PrintCovConstants.functions + "**",
       "**" + PrintCovConstants.lines + "**",
