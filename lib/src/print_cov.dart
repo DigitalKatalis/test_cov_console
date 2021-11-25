@@ -214,16 +214,16 @@ void _printTotal(bool isCsv, bool isLineOnly, _Data totalData) {
 ///
 /// It will print header coverage lines
 void _printHeader(bool isCsv, bool isLineOnly, String module) {
-  // _print(
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   PrintCovConstants.dash,
-  //   isCsv,
-  //   isLineOnly,
-  // );
+  _print(
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    PrintCovConstants.dash,
+    isCsv,
+    isLineOnly,
+  );
   _print(
       "**" + "${PrintCovConstants.file}$module" + "**",
       "**" + PrintCovConstants.branch + "**",
