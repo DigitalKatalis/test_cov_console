@@ -230,7 +230,7 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
       "**" + PrintCovConstants.functions + "**",
       "**" + PrintCovConstants.lines + "**",
       "**" + PrintCovConstants.unCovered + "**",
-      "**" + PrintCovConstants.space + "**",
+      PrintCovConstants.space,
       isCsv,
       isLineOnly,
       isSave: true);
