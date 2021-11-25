@@ -1,7 +1,7 @@
 class PrintCovConstants {
-  static const fileLen = 45;
-  static const percentLen = 9;
-  static const uncoverLen = 19;
+  static const fileLen = 40;
+  static const percentLen = 10;
+  static const uncoverLen = 20;
   static const hundred = '100.00';
   static const zero = '0';
   static const comma = ',';

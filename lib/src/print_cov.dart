@@ -104,7 +104,7 @@ void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module
           // instruction missed
           + "${data.linesFound - data.linesHit},"
           // instruction covered
-          + "${data.linesFound},"
+          + "${data.linesHit},"
           // branch missed
           + "${data.branchFound - data.branchHit},"
           // branch covered
@@ -112,7 +112,7 @@ void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module
           // line missed
           + "${data.linesFound - data.linesHit},"
           // line covered
-          + "${data.linesFound},"
+          + "${data.linesHit},"
           // complexity missed
           + "${data.branchFound - data.branchHit},"
           // complexity covered
@@ -186,44 +186,44 @@ void printCov(List<String> lines, List<FileEntity> files, String module,
 ///
 /// It will print total coverage lines
 void _printTotal(bool isCsv, bool isLineOnly, _Data totalData) {
-  _print(
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    isCsv,
-    isLineOnly,
-  );
+  // _print(
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   isCsv,
+  //   isLineOnly,
+  // );
   totalData.file = FileEntity(PrintCovConstants.allFiles);
   _printFile(totalData, isCsv, isLineOnly);
-  _print(
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    isCsv,
-    isLineOnly,
-  );
+  // _print(
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   isCsv,
+  //   isLineOnly,
+  // );
 }
 
 /// _printHeader
 ///
 /// It will print header coverage lines
 void _printHeader(bool isCsv, bool isLineOnly, String module) {
-  _print(
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    isCsv,
-    isLineOnly,
-  );
+  // _print(
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   isCsv,
+  //   isLineOnly,
+  // );
   _print(
       '${PrintCovConstants.file}$module',
       PrintCovConstants.branch,
@@ -422,11 +422,11 @@ void _print(String file, String branch, String function, String lines,
       OutputFile.tmpFile.add(output);
     }
   } else {
-    output = '${file.padRight(PrintCovConstants.fileLen, filler)}|'
-        '${branch.padLeft(PrintCovConstants.percentLen, filler)}|'
-        '${function.padLeft(PrintCovConstants.percentLen, filler)}|'
-        '${lines.padLeft(PrintCovConstants.percentLen, filler)}|'
-        '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)}|';
+    output = '| ${file.padRight(PrintCovConstants.fileLen, filler)} | '
+        '${branch.padLeft(PrintCovConstants.percentLen, filler)} | '
+        '${function.padLeft(PrintCovConstants.percentLen, filler)} | '
+        '${lines.padLeft(PrintCovConstants.percentLen, filler)} | '
+        '${uncovered.padLeft(PrintCovConstants.uncoverLen, filler)} | ';
     if (isLineOnly) {
       output =
           '${file.padRight(PrintCovConstants.fileLen + 2 * PrintCovConstants.percentLen, filler)}|'
