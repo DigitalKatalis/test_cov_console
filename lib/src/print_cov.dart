@@ -225,25 +225,25 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
   //   isLineOnly,
   // );
   _print(
-      '${PrintCovConstants.file}$module',
-      PrintCovConstants.branch,
-      PrintCovConstants.functions,
-      PrintCovConstants.lines,
-      PrintCovConstants.unCovered,
-      PrintCovConstants.space,
+      "**${PrintCovConstants.file}$module**",
+      "**" + PrintCovConstants.branch + "**",
+      "**" +PrintCovConstants.functions + "**",
+      "**" +PrintCovConstants.lines + "**",
+      "**" +PrintCovConstants.unCovered + "**",
+      "**" +PrintCovConstants.space + "**",
       isCsv,
       isLineOnly,
       isSave: true);
-  _print(
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    PrintCovConstants.dash,
-    isCsv,
-    isLineOnly,
-  );
+  // _print(
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   PrintCovConstants.dash,
+  //   isCsv,
+  //   isLineOnly,
+  // );
 }
 
 /// _getCoverage
