@@ -1,3 +1,7 @@
+## 0.2.0 - 22 Jan 2022
+
+* Null safety implementation
+
 ## 0.1.5 - 7 Nov 2021
 
 * Fixed duplicate directory on multi option
