@@ -1,3 +1,7 @@
+## 0.2.1 - 9 Mar 2022
+
+* Fixed total coverage when using -e
+
 ## 0.2.0 - 22 Jan 2022
 
 * Null safety implementation
