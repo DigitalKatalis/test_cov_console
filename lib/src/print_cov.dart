@@ -201,6 +201,7 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
 /// _getCoverage
 ///
 /// Convert List of string [lines] in lcov format to list of [_Data]
+/// It will proceed only all files on [files], and ignore the rest
 Map<String, _Data> _getCoverage(List<String> lines, List<FileEntity> files) {
   Map<String, _Data> dataList = {};
   late _Data currentData;
@@ -287,11 +288,13 @@ String _printDir(_Data? data, FileEntity file, String directory, bool isCsv,
   if (file.directory != dir) {
     dir = file.directory;
     _print(
-        _formatString(
-            file.directory,
-            PrintCovConstants.fileLen +
-                (isLineOnly ? (2 * PrintCovConstants.percentLen) : 0),
-            PrintCovConstants.emptyString),
+        isCsv
+            ? file.directory
+            : _formatString(
+                file.directory,
+                PrintCovConstants.fileLen +
+                    (isLineOnly ? (2 * PrintCovConstants.percentLen) : 0),
+                PrintCovConstants.emptyString),
         PrintCovConstants.space,
         PrintCovConstants.space,
         PrintCovConstants.space,
@@ -339,8 +342,10 @@ _Data _printFile(_Data data, bool isCsv, bool isLineOnly) {
     uncovered = _formatString(
         uncovered, PrintCovConstants.uncoverLen, PrintCovConstants.dot3);
   }
-  final file = _formatString(' ${data.getFileName()}',
-      PrintCovConstants.fileLen, PrintCovConstants.emptyString);
+  final file = isCsv
+      ? ' ${data.getFileName()}'
+      : _formatString(' ${data.getFileName()}', PrintCovConstants.fileLen,
+          PrintCovConstants.emptyString);
   _print(file, branch, functions, lines, uncovered, PrintCovConstants.space,
       isCsv, isLineOnly,
       isSave: true);
@@ -408,15 +413,17 @@ void _print(String file, String branch, String function, String lines,
 /// Get all dart files on [path] directory (e.g. lib directory), recursive to all
 /// sub-directories.
 /// [exclude] is the list of string to filter/exclude any files (contain).
-Future<List<FileEntity>> getFiles(
-    String path, List<String> excludes, String module) async {
+/// [includes] is the list of string to filter/include any files (contain).
+Future<List<FileEntity>> getFiles(String path, List<String> excludes,
+    List<String> includes, String module) async {
   final dir = Directory(path);
   final files = await dir.list(recursive: true).toList();
   final List<FileEntity> list = [];
   files.forEach((element) {
     final String file = element.uri.toString();
     if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
-        !_isContain(excludes, file)) {
+        (excludes.isEmpty || !_isContain(excludes, file)) &&
+        (includes.isEmpty || _isContain(includes, file))) {
       String strFile = replaceSlash(element.uri.toString());
       if (module.isNotEmpty) {
         strFile = strFile.replaceFirst('$module/', '');
