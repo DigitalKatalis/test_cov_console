@@ -50,9 +50,20 @@ void main() {
   group('getFiles', () {
     test('should return file list with some exclusion', () async {
       final dir = _getCurrentDir();
-      final result = await getFiles('${dir}lib', ['constants'], '');
+      final result = await getFiles('${dir}lib', ['constants'], [], '');
       expect(result[0].toString(), '$dir${files0[0].toString()}');
       expect(result[1].toString(), '$dir${files0[1].toString()}');
+    });
+    test('should return file list with some inclusion', () async {
+      final dir = _getCurrentDir();
+      final result = await getFiles('${dir}lib', [], ['parser'], '');
+      expect(result[0].toString(), '$dir${files0[1].toString()}');
+    });
+    test('should return empty for the same value of inclusion & exclusion',
+        () async {
+      final dir = _getCurrentDir();
+      final result = await getFiles('${dir}lib', ['parser'], ['parser'], '');
+      expect(result.isEmpty, true);
     });
   });
 
