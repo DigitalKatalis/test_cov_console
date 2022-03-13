@@ -1,3 +1,7 @@
+## 0.2.2 - 13 Mar 2022
+
+* Add --include option to print particular files only
+
 ## 0.2.1 - 9 Mar 2022
 
 * Fixed total coverage when using -e
