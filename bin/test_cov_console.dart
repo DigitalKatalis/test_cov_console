@@ -10,15 +10,6 @@ import 'package:test_cov_console/test_cov_console.dart';
 ///
 /// If not given a FILE, 'coverage/lcov.info' will be used.
 ///
-/// Usage:
-/// ```text
-/// -f, --file=<FILE>         the target lcov.info file to be reported
-/// -e, --exclude=<STRING1,STRING2,...>
-///                           a list of contains string for files without unit testing
-///                           to be excluded from report
-/// -m, --multi               report from multiple lcov.info files
-/// -h, --help                show this help
-/// ```
 Future main(List<String> arguments) async {
   final args = Parser(arguments).parse();
   if (args[ParserConstants.help] != null) {
@@ -26,7 +17,8 @@ Future main(List<String> arguments) async {
     exit(0);
   }
 
-  final List<String> patterns = args[ParserConstants.exclude] ?? [];
+  final List<String> exPatterns = args[ParserConstants.exclude] ?? [];
+  final List<String> inPatterns = args[ParserConstants.include] ?? [];
 
   final slash = Platform.isWindows ? '\\' : '/';
   final lcovFile = args[ParserConstants.file] ?? 'coverage${slash}lcov.info';
@@ -55,10 +47,12 @@ Future main(List<String> arguments) async {
           .replaceAll('/', '');
       final lCovFullPath = '${dir.isEmpty ? '' : '$dir$slash'}$lcovFile';
       final libFullPath = '${dir.isEmpty ? '' : '$dir$slash'}lib';
-      await _printSingleLCov(lCovFullPath, patterns, libFullPath, dir, isCsv, isJacocoCsv, isLineOnly, args);
+      await _printSingleLCov(lCovFullPath, exPatterns, inPatterns, libFullPath,
+          dir, isCsv, isJacocoCsv, isLineOnly, args);
     }
   } else {
     await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
+        lcovFile, exPatterns, inPatterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
   }
 
   if (isCsv || isJacocoCsv) {
@@ -69,7 +63,8 @@ Future main(List<String> arguments) async {
 /// _print report for single module
 Future<void> _printSingleLCov(
     String lcovFile,
-    List<String> patterns,
+    List<String> exPatterns,
+    List<String> inPatterns,
     String lib,
     String module,
     bool isCsv,
@@ -84,7 +79,10 @@ Future<void> _printSingleLCov(
   final bool isSummary =
       args[ParserConstants.pass] != null || args[ParserConstants.total] != null;
   if (!isSummary && args[ParserConstants.ignore] == null) {
-    files = await getFiles(lib, patterns, module);
+    files = await getFiles(lib, exPatterns, inPatterns, module);
+    if ((exPatterns.isNotEmpty || inPatterns.isNotEmpty) && files.isEmpty) {
+      return;
+    }
   }
   final min = int.parse(args[ParserConstants.pass] ?? '0');
   if (!isJacocoCsv) {

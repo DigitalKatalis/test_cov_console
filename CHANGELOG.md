@@ -1,3 +1,15 @@
+## 0.2.2 - 13 Mar 2022
+
+* Add --include option to print particular files only
+
+## 0.2.1 - 9 Mar 2022
+
+* Fixed total coverage when using -e
+
+## 0.2.0 - 22 Jan 2022
+
+* Null safety implementation
+
 ## 0.1.5 - 7 Nov 2021
 
 * Fixed duplicate directory on multi option

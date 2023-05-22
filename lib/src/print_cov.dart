@@ -45,11 +45,11 @@ class FileEntity {
 /// Simple class to store the csv output to List
 /// and save it to csv file
 class OutputFile {
-  static File outputFile;
+  static File? outputFile;
   static List<String> tmpFile = [];
 
   static Future<void> saveFile() async {
-    await outputFile.writeAsString(tmpFile.join());
+    await outputFile?.writeAsString(tmpFile.join());
   }
 }
 
@@ -143,9 +143,9 @@ void printJacocoHeader() {
 /// [isLineOnly] is it will print Lines & Uncovered Lines only
 void printCov(List<String> lines, List<FileEntity> files, String module,
     bool isCsv, bool isSummary, int min, bool isLineOnly) {
-  final dataList = _getCoverage(lines);
+  final dataList = _getCoverage(lines, files);
 
-  final totalData = dataList[PrintCovConstants.allFiles];
+  final totalData = dataList[PrintCovConstants.allFiles]!;
   if (isSummary) {
     final mdl = module.isEmpty ? '' : '$module : ';
     if (min > 0) {
@@ -249,19 +249,26 @@ void _printHeader(bool isCsv, bool isLineOnly, String module) {
 /// _getCoverage
 ///
 /// Convert List of string [lines] in lcov format to list of [_Data]
-Map<String, _Data> _getCoverage(List<String> lines) {
+/// It will proceed only all files on [files], and ignore the rest
+Map<String, _Data> _getCoverage(List<String> lines, List<FileEntity> files) {
   Map<String, _Data> dataList = {};
-  _Data currentData;
+  late _Data currentData;
   _Data totalData = _Data(FileEntity(PrintCovConstants.allFiles));
+  final listFiles = files.map((e) => e.toString()).toList();
+  bool isCalculate = true;
+
   for (final line in lines) {
     final values = line.split(PrintCovConstants.colon);
     switch (values[0]) {
       case PrintCovConstants.SF:
-        currentData = _Data(FileEntity(values.last
-            .replaceAll(PrintCovConstants.bSlash, PrintCovConstants.slash)));
+        isCalculate = files.isEmpty || listFiles.contains(values.last);
+        if (isCalculate) {
+          currentData = _Data(FileEntity(values.last
+              .replaceAll(PrintCovConstants.bSlash, PrintCovConstants.slash)));
+        }
         break;
       case PrintCovConstants.DA:
-        if (line.endsWith(PrintCovConstants.zero)) {
+        if (isCalculate && line.endsWith(PrintCovConstants.zero)) {
           currentData.uncoveredLines =
               (currentData.uncoveredLines != PrintCovConstants.emptyString
                       ? '${currentData.uncoveredLines},'
@@ -270,25 +277,37 @@ Map<String, _Data> _getCoverage(List<String> lines) {
         }
         break;
       case PrintCovConstants.LF:
-        currentData.linesFound = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.linesFound = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.LH:
-        currentData.linesHit = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.linesHit = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.FNF:
-        currentData.functionFound = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.functionFound = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.FNH:
-        currentData.functionHit = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.functionHit = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.BRF:
-        currentData.branchFound = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.branchFound = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.BRH:
-        currentData.branchHit = int.parse(values[1]);
+        if (isCalculate) {
+          currentData.branchHit = int.parse(values[1]);
+        }
         break;
       case PrintCovConstants.BRDA:
-        if (line.endsWith(PrintCovConstants.zero)) {
+        if (isCalculate && line.endsWith(PrintCovConstants.zero)) {
           currentData.uncoveredBranch =
               (currentData.uncoveredBranch != PrintCovConstants.emptyString
                       ? '${currentData.uncoveredBranch},'
@@ -297,7 +316,7 @@ Map<String, _Data> _getCoverage(List<String> lines) {
         }
         break;
       case PrintCovConstants.endOfRecord:
-        {
+        if (isCalculate) {
           dataList[currentData.file.toString()] = currentData;
           totalData.total(currentData);
         }
@@ -311,17 +330,19 @@ Map<String, _Data> _getCoverage(List<String> lines) {
 /// _printDir.
 ///
 /// print directory [directory] & test coverage result [data]
-String _printDir(_Data data, FileEntity file, String directory, bool isCsv,
+String _printDir(_Data? data, FileEntity file, String directory, bool isCsv,
     bool isLineOnly) {
   String dir = directory;
   if (file.directory != dir) {
     dir = file.directory;
     _print(
-        _formatString(
-            file.directory,
-            PrintCovConstants.fileLen +
-                (isLineOnly ? (2 * PrintCovConstants.percentLen) : 0),
-            PrintCovConstants.emptyString),
+        isCsv
+            ? file.directory
+            : _formatString(
+                file.directory,
+                PrintCovConstants.fileLen +
+                    (isLineOnly ? (2 * PrintCovConstants.percentLen) : 0),
+                PrintCovConstants.emptyString),
         PrintCovConstants.space,
         PrintCovConstants.space,
         PrintCovConstants.space,
@@ -369,8 +390,10 @@ _Data _printFile(_Data data, bool isCsv, bool isLineOnly) {
     uncovered = _formatString(
         uncovered, PrintCovConstants.uncoverLen, PrintCovConstants.dot3);
   }
-  final file = _formatString(' ${data.getFileName()}',
-      PrintCovConstants.fileLen, PrintCovConstants.emptyString);
+  final file = isCsv
+      ? ' ${data.getFileName()}'
+      : _formatString(' ${data.getFileName()}', PrintCovConstants.fileLen,
+          PrintCovConstants.emptyString);
   _print(file, branch, functions, lines, uncovered, PrintCovConstants.space,
       isCsv, isLineOnly,
       isSave: true);
@@ -442,15 +465,17 @@ void _print(String file, String branch, String function, String lines,
 /// Get all dart files on [path] directory (e.g. lib directory), recursive to all
 /// sub-directories.
 /// [exclude] is the list of string to filter/exclude any files (contain).
-Future<List<FileEntity>> getFiles(
-    String path, List<String> excludes, String module) async {
+/// [includes] is the list of string to filter/include any files (contain).
+Future<List<FileEntity>> getFiles(String path, List<String> excludes,
+    List<String> includes, String module) async {
   final dir = Directory(path);
   final files = await dir.list(recursive: true).toList();
   final List<FileEntity> list = [];
   files.forEach((element) {
     final String file = element.uri.toString();
     if (file.split(PrintCovConstants.dot).last == PrintCovConstants.dart &&
-        !_isContain(excludes, file)) {
+        (excludes.isEmpty || !_isContain(excludes, file)) &&
+        (includes.isEmpty || _isContain(includes, file))) {
       String strFile = replaceSlash(element.uri.toString());
       if (module.isNotEmpty) {
         strFile = strFile.replaceFirst('$module/', '');
