@@ -84,11 +84,11 @@ class _Data {
 }
 
 void printJacocoCovCsv(List<String> lines, List<FileEntity> files, String module) {
-  final dataList = _getCoverage(lines);
+  final dataList = _getCoverage(lines, files);
 
   for (final file in files) {
     if (!file.fileName.contains("All files")) {
-      _Data data = dataList[file.toString()];
+      _Data? data = dataList[file.toString()];
       if (data == null) {
         data = _Data(file);
         data.linesFound = File(module + "/" + file.toString()).readAsLinesSync().length;

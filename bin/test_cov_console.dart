@@ -51,8 +51,7 @@ Future main(List<String> arguments) async {
           dir, isCsv, isJacocoCsv, isLineOnly, args);
     }
   } else {
-    await _printSingleLCov(lcovFile, patterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
-        lcovFile, exPatterns, inPatterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
+    await _printSingleLCov(lcovFile, exPatterns, inPatterns, 'lib', '', isCsv, isJacocoCsv, isLineOnly, args);
   }
 
   if (isCsv || isJacocoCsv) {
